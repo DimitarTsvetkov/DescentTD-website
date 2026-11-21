@@ -2,7 +2,6 @@
 
 The marketing site for **DescentTD: Nine Circles**: Astro 5 (static), GSAP ScrollTrigger and Lenis, plain CSS.
 The plan behind it is `Docs/Plans/Website_Plan.md` in the game repo.
-//new deploy
 
 ## Run it locally
 
