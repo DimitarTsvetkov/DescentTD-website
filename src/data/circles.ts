@@ -12,6 +12,9 @@ export interface Circle {
   bossQuip: string;
 }
 
+/** URL fragment for a circle: descenttd.com/#lust, /#the-center */
+export const circleSlug = (c: Circle) => c.name.toLowerCase().replace(/\s+/g, '-');
+
 export const circles: Circle[] = [
   {
     n: 1, numeral: 'I', name: 'Limbo', levels: '1–10', colour: '#5f7a6a',

@@ -3,8 +3,10 @@ export const site = {
   name: 'DescentTD: Nine Circles',
   shortName: 'DescentTD',
   tagline: 'Nine circles. 91 levels. One very nervous poet.',
+  // Home page <title>: what people search for, then the name.
+  homeTitle: 'DescentTD: Nine Circles – Tower Defense Game for iPhone, iPad & Android',
   description:
-    'A hand-painted tower defense comedy for iPhone, iPad and Android. Guide a very nervous Dante down nine circles of the underworld, one funny soul at a time.',
+    'A hand-painted tower defense comedy. Guide a very nervous Dante down the nine circles of hell: 91 levels, 12 towers with branching upgrades, an endless mode and weekly challenges. Plays offline.',
   url: 'https://descenttd.com',
   developer: 'Dimitar Tsvetkov',
   email: 'clumsylab_support@icloud.com',

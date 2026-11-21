@@ -4,7 +4,7 @@
 import { Image, Picture } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import Sprite from './Sprite.astro';
-import { circles } from '../data/circles';
+import { circles, circleSlug } from '../data/circles';
 
 const backdrops = import.meta.glob<{ default: ImageMetadata }>('../assets/game/circles/*/backdrop.webp', { eager: true });
 const bosses = import.meta.glob<{ default: ImageMetadata }>('../assets/game/circles/*/boss*.webp', { eager: true });
@@ -34,7 +34,7 @@ const img = (map: Record<string, { default: ImageMetadata }>, n: number, file: s
       {
         circles.map((c) => (
           <li>
-            <a href={`#circle-${c.n}`} data-gauge-link={c.n} title={c.name}>
+            <a href={`#${circleSlug(c)}`} data-gauge-link={c.n} title={c.name}>
               <span aria-hidden="true">{c.numeral}</span>
               <span class="visually-hidden">{c.name}</span>
             </a>
@@ -47,7 +47,7 @@ const img = (map: Record<string, { default: ImageMetadata }>, n: number, file: s
   {
     circles.map((c) => (
       <article
-        id={`circle-${c.n}`}
+        id={circleSlug(c)}
         class:list={['scene', { 'scene--center': c.n === 10 }]}
         style={`--c:${c.colour}`}
         data-scene={c.n}

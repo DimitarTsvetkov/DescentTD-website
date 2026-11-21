@@ -7,20 +7,30 @@ import Features from '../components/Features.astro';
 import FinalCta from '../components/FinalCta.astro';
 import { site } from '../data/site';
 
+const stores = [site.appStoreUrl, site.playStoreUrl].filter(Boolean);
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': ['VideoGame', 'MobileApplication'],
+  '@id': `${site.url}/#game`,
   name: site.name,
+  alternateName: site.shortName,
   description: site.description,
-  url: site.url,
+  url: `${site.url}/`,
   image: `${site.url}/og-card.jpg`,
-  genre: ['Tower defense', 'Strategy', 'Comedy'],
+  genre: ['Tower defense', 'Strategy', 'Casual', 'Comedy'],
   gamePlatform: ['iOS', 'iPadOS', 'Android'],
-  operatingSystem: 'iOS, Android',
+  operatingSystem: 'iOS, iPadOS, Android',
   applicationCategory: 'GameApplication',
   playMode: 'SinglePlayer',
-  author: { '@type': 'Person', name: site.developer },
-  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  numberOfPlayers: { '@type': 'QuantitativeValue', value: 1 },
+  inLanguage: 'en',
+  isAccessibleForFree: true,
+  author: { '@id': `${site.url}/#developer` },
+  publisher: { '@id': `${site.url}/#developer` },
+  // Store links and the price only once the game is out, so nothing claims it can be downloaded today.
+  ...(site.launched && stores.length
+    ? { sameAs: stores, offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD', availability: 'https://schema.org/InStock' } }
+    : {}),
 };
 ---
 
