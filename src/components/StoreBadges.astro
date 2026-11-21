@@ -1,0 +1,78 @@
+---
+// Before launch: a "Coming soon" plate. After launch: links to the stores.
+// When the links go live, swap the text buttons for Apple's and Google's official badge artwork, unaltered.
+import { site } from '../data/site';
+
+interface Props {
+  size?: 'md' | 'lg';
+  align?: 'start' | 'center';
+}
+const { size = 'md', align = 'start' } = Astro.props;
+---
+
+<div class:list={['badges', `badges--${size}`, `badges--${align}`]}>
+  {
+    site.launched ? (
+      <>
+        {site.appStoreUrl && (
+          <a class="btn" href={site.appStoreUrl} rel="noopener">
+            Download on the App Store
+          </a>
+        )}
+        {site.playStoreUrl && (
+          <a class="btn" href={site.playStoreUrl} rel="noopener">
+            Get it on Google Play
+          </a>
+        )}
+      </>
+    ) : (
+      <p class="soon">
+        <span class="soon__label">Coming soon</span>
+        <span class="soon__where">to iPhone, iPad &amp; Android</span>
+      </p>
+    )
+  }
+</div>
+
+<style>
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+
+  .badges--center {
+    justify-content: center;
+  }
+
+  .soon {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 0.7rem 1.6rem 0.8rem;
+    border: 1.5px solid rgb(242 184 75 / 0.55);
+    border-radius: var(--radius);
+    background: rgb(18 20 28 / 0.6);
+    backdrop-filter: blur(6px);
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .soon__label {
+    font-family: var(--font-hand);
+    font-size: var(--step-2);
+    color: var(--gold);
+  }
+
+  .soon__where {
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+  }
+
+  .badges--lg .soon__label {
+    font-size: var(--step-3);
+  }
+</style>

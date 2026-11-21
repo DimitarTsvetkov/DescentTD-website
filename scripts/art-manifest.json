@@ -1,0 +1,908 @@
+{
+ "//": "Files copied from the game repo by scripts/import-art.mjs. Paths in 'from' are relative to the game repo (GAME_REPO, default ~/hellBreakLooseTD).",
+ "images": [
+  {
+   "from": "Docs/Plans/Version2_KeyArt.webp",
+   "to": "hero/keyart.webp",
+   "max": [
+    2400,
+    2400
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C1_Limbo/C1_Backdrop_Far.png",
+   "to": "circles/c1/backdrop.webp",
+   "max": [
+    2048,
+    2048
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C1_BOS_LostPhilosopher_Painted.png",
+   "to": "circles/c1/boss.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C2_Lust/C2_Backdrop_Far.png",
+   "to": "circles/c2/backdrop.webp",
+   "max": [
+    2048,
+    2048
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C2_BOS_Minos_Painted.png",
+   "to": "circles/c2/boss.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C3_Gluttony/C3_Backdrop_Far.png",
+   "to": "circles/c3/backdrop.webp",
+   "max": [
+    2048,
+    2048
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C3_BOS_ThreeHeadedHound_Painted.png",
+   "to": "circles/c3/boss.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C4_Greed/C4_Backdrop_Far.png",
+   "to": "circles/c4/backdrop.webp",
+   "max": [
+    2048,
+    2048
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C4_BOS_Plutus_Painted.png",
+   "to": "circles/c4/boss.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C5_Wrath/C5_Backdrop_Far.png",
+   "to": "circles/c5/backdrop.webp",
+   "max": [
+    2048,
+    2048
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C5_BOS_Ferryman_Painted.png",
+   "to": "circles/c5/boss.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C6_Heresy/C6_Backdrop_Far.png",
+   "to": "circles/c6/backdrop.webp",
+   "max": [
+    2048,
+    2048
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C6_BOS_Gatekeeper_Painted.png",
+   "to": "circles/c6/boss.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C7_Violence/C7_Backdrop_Far.png",
+   "to": "circles/c7/backdrop.webp",
+   "max": [
+    2048,
+    2048
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C7_BOS_Minotaur_Painted.png",
+   "to": "circles/c7/boss.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C8_Fraud/C8_Backdrop_Far.png",
+   "to": "circles/c8/backdrop.webp",
+   "max": [
+    2048,
+    2048
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C8_BOS_Geryon_Painted.png",
+   "to": "circles/c8/boss.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C9_Treachery/C9_Backdrop_Far.png",
+   "to": "circles/c9/backdrop.webp",
+   "max": [
+    2048,
+    2048
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C9_BOS_TwinGiants_Painted.png",
+   "to": "circles/c9/boss.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C10_TheCenter/C10_Backdrop_Far.png",
+   "to": "circles/c10/backdrop.webp",
+   "max": [
+    2048,
+    2048
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C10_BOS_FrozenEmperor_Painted.png",
+   "to": "circles/c10/boss.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C10_BOS_FrozenEmperor_Dormant_Painted.png",
+   "to": "circles/c10/boss-dormant.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_EmberBrazier_T1_Painted.png",
+   "to": "towers/emberbrazier-t1.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_EmberBrazier_T2_Painted.png",
+   "to": "towers/emberbrazier-t2.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_EmberBrazier_T3_Painted.png",
+   "to": "towers/emberbrazier-t3.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_EmberBrazier_T4A_Painted.png",
+   "to": "towers/emberbrazier-t4a.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_EmberBrazier_T4B_Painted.png",
+   "to": "towers/emberbrazier-t4b.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_ChainWarden_T1_Painted.png",
+   "to": "towers/chainwarden-t1.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_ChainWarden_T2_Painted.png",
+   "to": "towers/chainwarden-t2.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_ChainWarden_T3_Painted.png",
+   "to": "towers/chainwarden-t3.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_ChainWarden_T4A_Painted.png",
+   "to": "towers/chainwarden-t4a.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_ChainWarden_T4B_Painted.png",
+   "to": "towers/chainwarden-t4b.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_TempestObelisk_T1_Painted.png",
+   "to": "towers/tempestobelisk-t1.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_TempestObelisk_T2_Painted.png",
+   "to": "towers/tempestobelisk-t2.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_TempestObelisk_T3_Painted.png",
+   "to": "towers/tempestobelisk-t3.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_TempestObelisk_T4A_Painted.png",
+   "to": "towers/tempestobelisk-t4a.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_TempestObelisk_T4B_Painted.png",
+   "to": "towers/tempestobelisk-t4b.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_StyxSentinel_T1_Painted.png",
+   "to": "towers/styxsentinel-t1.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_StyxSentinel_T2_Painted.png",
+   "to": "towers/styxsentinel-t2.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_StyxSentinel_T3_Painted.png",
+   "to": "towers/styxsentinel-t3.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_StyxSentinel_T4A_Painted.png",
+   "to": "towers/styxsentinel-t4a.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_StyxSentinel_T4B_Painted.png",
+   "to": "towers/styxsentinel-t4b.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_HarpyRoost_T1_Painted.png",
+   "to": "towers/harpyroost-t1.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_HarpyRoost_T2_Painted.png",
+   "to": "towers/harpyroost-t2.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_HarpyRoost_T3_Painted.png",
+   "to": "towers/harpyroost-t3.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_HarpyRoost_T4A_Painted.png",
+   "to": "towers/harpyroost-t4a.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_HarpyRoost_T4B_Painted.png",
+   "to": "towers/harpyroost-t4b.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_VirgilsLantern_T1_Painted.png",
+   "to": "towers/virgilslantern-t1.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_VirgilsLantern_T2_Painted.png",
+   "to": "towers/virgilslantern-t2.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_VirgilsLantern_T3_Painted.png",
+   "to": "towers/virgilslantern-t3.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_VirgilsLantern_T4A_Painted.png",
+   "to": "towers/virgilslantern-t4a.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_VirgilsLantern_T4B_Painted.png",
+   "to": "towers/virgilslantern-t4b.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_CocytusSpire_T1_Painted.png",
+   "to": "towers/cocytusspire-t1.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_CocytusSpire_T2_Painted.png",
+   "to": "towers/cocytusspire-t2.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_CocytusSpire_T3_Painted.png",
+   "to": "towers/cocytusspire-t3.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_CocytusSpire_T4A_Painted.png",
+   "to": "towers/cocytusspire-t4a.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_CocytusSpire_T4B_Painted.png",
+   "to": "towers/cocytusspire-t4b.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_BoulderHurler_T1_Painted.png",
+   "to": "towers/boulderhurler-t1.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_BoulderHurler_T2_Painted.png",
+   "to": "towers/boulderhurler-t2.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_BoulderHurler_T3_Painted.png",
+   "to": "towers/boulderhurler-t3.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_BoulderHurler_T4A_Painted.png",
+   "to": "towers/boulderhurler-t4a.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_BoulderHurler_T4B_Painted.png",
+   "to": "towers/boulderhurler-t4b.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_TollBooth_T1_Painted.png",
+   "to": "towers/tollbooth-t1.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_TollBooth_T2_Painted.png",
+   "to": "towers/tollbooth-t2.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_TollBooth_T3_Painted.png",
+   "to": "towers/tollbooth-t3.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_TollBooth_T4A_Painted.png",
+   "to": "towers/tollbooth-t4a.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_TollBooth_T4B_Painted.png",
+   "to": "towers/tollbooth-t4b.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_DoomBell_T1_Painted.png",
+   "to": "towers/doombell-t1.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_DoomBell_T2_Painted.png",
+   "to": "towers/doombell-t2.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_DoomBell_T3_Painted.png",
+   "to": "towers/doombell-t3.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_DoomBell_T4A_Painted.png",
+   "to": "towers/doombell-t4a.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_DoomBell_T4B_Painted.png",
+   "to": "towers/doombell-t4b.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_CentaurOutpost_T1_Painted.png",
+   "to": "towers/centauroutpost-t1.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_CentaurOutpost_T2_Painted.png",
+   "to": "towers/centauroutpost-t2.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_CentaurOutpost_T3_Painted.png",
+   "to": "towers/centauroutpost-t3.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_CentaurOutpost_T4A_Painted.png",
+   "to": "towers/centauroutpost-t4a.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_CentaurOutpost_T4B_Painted.png",
+   "to": "towers/centauroutpost-t4b.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_HallOfMirrors_T1_Painted.png",
+   "to": "towers/hallofmirrors-t1.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_HallOfMirrors_T2_Painted.png",
+   "to": "towers/hallofmirrors-t2.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_HallOfMirrors_T3_Painted.png",
+   "to": "towers/hallofmirrors-t3.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_HallOfMirrors_T4A_Painted.png",
+   "to": "towers/hallofmirrors-t4a.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Towers/TWR_HallOfMirrors_T4B_Painted.png",
+   "to": "towers/hallofmirrors-t4b.webp",
+   "max": [
+    420,
+    420
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/UI/UI_ICN_Spiral.png",
+   "to": "icons/spiral.webp",
+   "max": [
+    192,
+    192
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/UI/UI_ICN_Upgrade.png",
+   "to": "icons/upgrade.webp",
+   "max": [
+    192,
+    192
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/UI/UI_ICN_Abyss.png",
+   "to": "icons/abyss.webp",
+   "max": [
+    192,
+    192
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/UI/UI_ICN_Weekly.png",
+   "to": "icons/weekly.webp",
+   "max": [
+    192,
+    192
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/UI/UI_ICN_BrimstoneSeal.png",
+   "to": "icons/brimstoneseal.webp",
+   "max": [
+    192,
+    192
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/UI/UI_ICN_Lock.png",
+   "to": "icons/lock.webp",
+   "max": [
+    192,
+    192
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Ending/END_PLT_Stars.png",
+   "to": "ending/stars.webp",
+   "max": [
+    2048,
+    2048
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/KeyArt/APP_Icon.png",
+   "to": "brand/app-icon.webp",
+   "max": [
+    256,
+    256
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Characters/UI_PRT_Dante_Worried.png",
+   "to": "characters/dante-worried.webp",
+   "max": [
+    384,
+    384
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Characters/UI_PRT_Virgil_Deadpan.png",
+   "to": "characters/virgil-deadpan.webp",
+   "max": [
+    384,
+    384
+   ]
+  }
+ ],
+ "sprites": [
+  {
+   "from": "Assets/Art/Painted/Souls/C1_ENM_WanderingShade_Walk_Painted.png",
+   "to": "c1-wanderingshade.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C1_ENM_HurriedShade_Walk_Painted.png",
+   "to": "c1-hurriedshade.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C1_ENM_TomeBearer_Walk_Painted.png",
+   "to": "c1-tomebearer.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C2_ENM_StormSweptPair_Walk_Painted.png",
+   "to": "c2-stormsweptpair.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C2_ENM_GustGlider_Walk_Painted.png",
+   "to": "c2-gustglider.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C2_ENM_Serenader_Walk_Painted.png",
+   "to": "c2-serenader.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C3_ENM_BloatedGlutton_Walk_Painted.png",
+   "to": "c3-bloatedglutton.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C3_ENM_BurpBalloon_Walk_Painted.png",
+   "to": "c3-burpballoon.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C3_ENM_MudWallower_Walk_Painted.png",
+   "to": "c3-mudwallower.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C4_ENM_Hoarder_Walk_Painted.png",
+   "to": "c4-hoarder.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C4_ENM_Waster_Walk_Painted.png",
+   "to": "c4-waster.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C4_ENM_LooseChange_Walk_Painted.png",
+   "to": "c4-loosechange.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C5_ENM_Wrathful_Walk_Painted.png",
+   "to": "c5-wrathful.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C5_ENM_Sullen_Walk_Painted.png",
+   "to": "c5-sullen.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C5_ENM_FumingSoul_Walk_Painted.png",
+   "to": "c5-fumingsoul.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C6_ENM_TombHeretic_Walk_Painted.png",
+   "to": "c6-tombheretic.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C6_ENM_LidLifter_Walk_Painted.png",
+   "to": "c6-lidlifter.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C6_ENM_Fury_Walk_Painted.png",
+   "to": "c6-fury.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C7_ENM_CentaurArcher_Walk_Painted.png",
+   "to": "c7-centaurarcher.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C7_ENM_HotFootHopper_Walk_Painted.png",
+   "to": "c7-hotfoothopper.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C7_ENM_AshWalker_Walk_Painted.png",
+   "to": "c7-ashwalker.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C8_ENM_Flatterer_Walk_Painted.png",
+   "to": "c8-flatterer.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C8_ENM_Thief_Walk_Painted.png",
+   "to": "c8-thief.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C8_ENM_Seer_Walk_Painted.png",
+   "to": "c8-seer.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C9_ENM_FrozenTraitor_Walk_Painted.png",
+   "to": "c9-frozentraitor.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C9_ENM_ChillWisp_Walk_Painted.png",
+   "to": "c9-chillwisp.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C9_ENM_Betrayer_Walk_Painted.png",
+   "to": "c9-betrayer.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Ending/END_CHR_Dante_LookUp.png",
+   "to": "dante-lookup.webp",
+   "height": 360
+  },
+  {
+   "from": "Assets/Art/Painted/Ending/END_CHR_Virgil_LookUp.png",
+   "to": "virgil-lookup.webp",
+   "height": 360
+  }
+ ],
+ "font": {
+  "from": "Assets/Art/UI/Fonts/DescentHand-Regular.ttf",
+  "to": "src/assets/fonts/DescentHand.woff2"
+ },
+ "icon": {
+  "from": "Store/Graphics/AppStore_Icon_1024.png"
+ },
+ "ogCard": {
+  "from": "Docs/Plans/Version2_KeyArt.webp"
+ },
+ "text": [
+  {
+   "from": "Docs/Store/PrivacyPolicy.md",
+   "to": "src/content/privacy.md"
+  },
+  {
+   "from": "Docs/Store/SupportPage.md",
+   "to": "src/content/support.md"
+  }
+ ]
+}

@@ -1,0 +1,176 @@
+{
+ "c1-wanderingshade": {
+  "frames": 8,
+  "width": 217,
+  "height": 220,
+  "fps": 8
+ },
+ "c1-hurriedshade": {
+  "frames": 8,
+  "width": 232,
+  "height": 220,
+  "fps": 8
+ },
+ "c1-tomebearer": {
+  "frames": 8,
+  "width": 163,
+  "height": 220,
+  "fps": 8
+ },
+ "c2-stormsweptpair": {
+  "frames": 8,
+  "width": 288,
+  "height": 220,
+  "fps": 8
+ },
+ "c2-gustglider": {
+  "frames": 8,
+  "width": 200,
+  "height": 220,
+  "fps": 8
+ },
+ "c2-serenader": {
+  "frames": 8,
+  "width": 193,
+  "height": 220,
+  "fps": 8
+ },
+ "c3-bloatedglutton": {
+  "frames": 8,
+  "width": 212,
+  "height": 220,
+  "fps": 8
+ },
+ "c3-burpballoon": {
+  "frames": 8,
+  "width": 184,
+  "height": 220,
+  "fps": 8
+ },
+ "c3-mudwallower": {
+  "frames": 8,
+  "width": 186,
+  "height": 220,
+  "fps": 8
+ },
+ "c4-hoarder": {
+  "frames": 8,
+  "width": 268,
+  "height": 220,
+  "fps": 8
+ },
+ "c4-waster": {
+  "frames": 8,
+  "width": 230,
+  "height": 220,
+  "fps": 8
+ },
+ "c4-loosechange": {
+  "frames": 8,
+  "width": 348,
+  "height": 220,
+  "fps": 8
+ },
+ "c5-wrathful": {
+  "frames": 8,
+  "width": 220,
+  "height": 220,
+  "fps": 8
+ },
+ "c5-sullen": {
+  "frames": 8,
+  "width": 266,
+  "height": 220,
+  "fps": 8
+ },
+ "c5-fumingsoul": {
+  "frames": 8,
+  "width": 253,
+  "height": 220,
+  "fps": 8
+ },
+ "c6-tombheretic": {
+  "frames": 8,
+  "width": 189,
+  "height": 220,
+  "fps": 8
+ },
+ "c6-lidlifter": {
+  "frames": 8,
+  "width": 149,
+  "height": 220,
+  "fps": 8
+ },
+ "c6-fury": {
+  "frames": 8,
+  "width": 247,
+  "height": 220,
+  "fps": 8
+ },
+ "c7-centaurarcher": {
+  "frames": 8,
+  "width": 209,
+  "height": 220,
+  "fps": 8
+ },
+ "c7-hotfoothopper": {
+  "frames": 8,
+  "width": 211,
+  "height": 220,
+  "fps": 8
+ },
+ "c7-ashwalker": {
+  "frames": 8,
+  "width": 147,
+  "height": 220,
+  "fps": 8
+ },
+ "c8-flatterer": {
+  "frames": 8,
+  "width": 198,
+  "height": 220,
+  "fps": 8
+ },
+ "c8-thief": {
+  "frames": 8,
+  "width": 184,
+  "height": 220,
+  "fps": 8
+ },
+ "c8-seer": {
+  "frames": 8,
+  "width": 137,
+  "height": 220,
+  "fps": 8
+ },
+ "c9-frozentraitor": {
+  "frames": 8,
+  "width": 196,
+  "height": 220,
+  "fps": 8
+ },
+ "c9-chillwisp": {
+  "frames": 8,
+  "width": 262,
+  "height": 220,
+  "fps": 8
+ },
+ "c9-betrayer": {
+  "frames": 8,
+  "width": 217,
+  "height": 220,
+  "fps": 8
+ },
+ "dante-lookup": {
+  "frames": 8,
+  "width": 174,
+  "height": 360,
+  "fps": 4
+ },
+ "virgil-lookup": {
+  "frames": 8,
+  "width": 176,
+  "height": 360,
+  "fps": 4
+ }
+}

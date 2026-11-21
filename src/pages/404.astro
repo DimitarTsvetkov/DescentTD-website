@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+import Sprite from '../components/Sprite.astro';
+const home = import.meta.env.BASE_URL;
+---
+
+<Base title="Lost" description="This page doesn't exist.">
+  <section class="lost wrap">
+    <div class="lost__soul">
+      <Sprite id="c1-wanderingshade" label="A lost soul reading its map upside down" />
+    </div>
+    <p class="eyebrow">404</p>
+    <h1>This path leads nowhere.</h1>
+    <p class="lost__line">Even Virgil is confused.</p>
+    <a class="btn" href={home}>Back to the rim</a>
+  </section>
+</Base>
+
+<style>
+  .lost {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    min-height: 100svh;
+    padding: calc(var(--header-h) + 2rem) 0 4rem;
+    text-align: center;
+  }
+
+  .lost h1 {
+    font-size: var(--step-4);
+  }
+
+  .lost__line {
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+    margin-bottom: 1.8rem;
+  }
+
+  .lost__soul {
+    margin-bottom: 1rem;
+    animation: wander 5s ease-in-out infinite;
+  }
+
+  @keyframes wander {
+    0%,
+    100% {
+      transform: translateX(-40px);
+    }
+    45% {
+      transform: translateX(40px);
+    }
+    50% {
+      transform: translateX(40px) scaleX(-1);
+    }
+    95% {
+      transform: translateX(-40px) scaleX(-1);
+    }
+  }
+</style>

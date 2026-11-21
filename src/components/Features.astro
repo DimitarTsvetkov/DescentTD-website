@@ -1,0 +1,76 @@
+---
+import { Image } from 'astro:assets';
+import spiral from '../assets/game/icons/spiral.webp';
+import upgrade from '../assets/game/icons/upgrade.webp';
+import abyss from '../assets/game/icons/abyss.webp';
+import weekly from '../assets/game/icons/weekly.webp';
+import seal from '../assets/game/icons/brimstoneseal.webp';
+import lock from '../assets/game/icons/lock.webp';
+
+const features = [
+  { icon: spiral, title: '91 levels', text: 'Nine circles, then The Center. Each one brings new scenery, music, souls, a hazard and a boss.' },
+  { icon: upgrade, title: '12 towers, branching upgrades', text: 'Three upgrades each, then a choice between two very different Tier 4 paths.' },
+  { icon: abyss, title: 'The Abyss', text: 'Beat a circle’s boss and its Abyss opens: endless waves on that circle’s map, deeper and meaner every wave.' },
+  { icon: weekly, title: 'Weekly challenge', text: 'Every Monday, two new rule twists, such as Tight Budget or Everything Is Drenched.' },
+  { icon: seal, title: 'Brimstone Trials and skins', text: 'Earned by playing, never bought. Collect Seals to dress every tower in a circle’s colours.' },
+  { icon: lock, title: 'Fully offline', text: 'No account and no sign-in, and nothing leaves your phone unless you say yes. Play on a plane, in a tunnel or anywhere else.' },
+];
+---
+
+<section class="features" aria-labelledby="features-title">
+  <div class="wrap">
+    <p class="eyebrow">What’s in the game</p>
+    <h2 id="features-title" class="section-title">A whole underworld in your pocket</h2>
+    <ul class="grid">
+      {
+        features.map((f) => (
+          <li class="tile">
+            <Image src={f.icon} alt="" width={72} height={72} class="tile__icon" />
+            <h3 class="tile__title">{f.title}</h3>
+            <p>{f.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .features {
+    padding: clamp(3rem, 8vw, 6rem) 0;
+    background: var(--bg-2);
+    border-block: 1px solid var(--line);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
+    gap: 1rem;
+    margin: 1.8rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tile {
+    padding: 1.4rem;
+    border-radius: var(--radius-lg);
+    background: var(--bg-3);
+    border: 1px solid var(--line);
+  }
+
+  .tile :global(.tile__icon) {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 0.6rem;
+    filter: drop-shadow(0 6px 10px rgb(0 0 0 / 0.4));
+  }
+
+  .tile__title {
+    font-size: var(--step-2);
+  }
+
+  .tile p {
+    margin: 0;
+    color: var(--ink-soft);
+  }
+</style>

@@ -1,0 +1,456 @@
+---
+// The signature section: ten scenes, Limbo to The Center.
+// The content is plain HTML; src/scripts/descent.ts only adds motion.
+import { Image, Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Sprite from './Sprite.astro';
+import { circles } from '../data/circles';
+
+const backdrops = import.meta.glob<{ default: ImageMetadata }>('../assets/game/circles/*/backdrop.webp', { eager: true });
+const bosses = import.meta.glob<{ default: ImageMetadata }>('../assets/game/circles/*/boss*.webp', { eager: true });
+const img = (map: Record<string, { default: ImageMetadata }>, n: number, file: string) => {
+  const m = map[`../assets/game/circles/c${n}/${file}`];
+  if (!m) throw new Error(`Missing circles/c${n}/${file}. Run npm run import-art.`);
+  return m.default;
+};
+---
+
+<section id="descent" class="descent" aria-labelledby="descent-title">
+  <div class="descent__wash" aria-hidden="true"></div>
+
+  <header class="descent__intro wrap">
+    <p class="eyebrow">The descent</p>
+    <h2 id="descent-title" class="section-title">Nine circles down. Mind the step.</h2>
+    <p class="descent__lede">
+      A crack in the gates of the underworld, and the damned are making a run for it. Dante, a very nervous poet, and
+      Virgil, his long-dead and long-suffering guide, have to seal every circle on the way down. Every circle is a new
+      game: new scenery, new music, new souls, a new hazard and a new boss.
+    </p>
+  </header>
+
+  <nav class="gauge" aria-label="Circles" data-gauge>
+    <div class="gauge__track" aria-hidden="true"><div class="gauge__fill" data-gauge-fill></div></div>
+    <ol>
+      {
+        circles.map((c) => (
+          <li>
+            <a href={`#circle-${c.n}`} data-gauge-link={c.n} title={c.name}>
+              <span aria-hidden="true">{c.numeral}</span>
+              <span class="visually-hidden">{c.name}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </nav>
+
+  {
+    circles.map((c) => (
+      <article
+        id={`circle-${c.n}`}
+        class:list={['scene', { 'scene--center': c.n === 10 }]}
+        style={`--c:${c.colour}`}
+        data-scene={c.n}
+        data-colour={c.colour}
+        aria-labelledby={`circle-${c.n}-title`}
+      >
+        <div class="scene__bg" data-scene-bg>
+          <Picture
+            src={img(backdrops, c.n, 'backdrop.webp')}
+            formats={['avif', 'webp']}
+      fallbackFormat="jpg"
+            widths={[640, 1024, 1600, 2048]}
+            sizes="100vw"
+            alt=""
+            class="scene__bgimg"
+          />
+        </div>
+        <div class="scene__shade" aria-hidden="true" />
+
+        <div class="scene__inner">
+          <div class="scene__card" data-scene-card>
+            <p class="scene__num">
+              {c.n === 10 ? 'The bottom' : `Circle ${c.numeral}`} · <span>{c.levels}</span>
+            </p>
+            <h3 id={`circle-${c.n}-title`} class="scene__name">
+              {c.name}
+            </h3>
+            <p class="scene__line">{c.line}</p>
+            <p class="scene__hazard">
+              <span class="visually-hidden">Hazard:</span>
+              {c.hazard}
+            </p>
+          </div>
+
+          <figure class="scene__boss" data-scene-boss>
+            <div class="scene__bossart">
+              {c.n === 10 && (
+                <Image
+                  src={img(bosses, c.n, 'boss-dormant.webp')}
+                  widths={[360, 720]}
+                  sizes="(min-width: 900px) 34vw, 70vw"
+                  alt=""
+                  class="scene__bossimg scene__bossimg--dormant"
+                  data-dormant
+                />
+              )}
+              <Image
+                src={img(bosses, c.n, 'boss.webp')}
+                widths={[360, 720]}
+                sizes="(min-width: 900px) 34vw, 70vw"
+                alt={`${c.boss}, the boss of ${c.name}`}
+                class="scene__bossimg"
+              />
+            </div>
+            <figcaption>
+              <span class="scene__bossname">{c.boss}</span>
+              {c.bossQuip && <span class="scene__quip">“{c.bossQuip}”</span>}
+            </figcaption>
+          </figure>
+        </div>
+
+        {c.souls.length > 0 && (
+          <div class="scene__souls" aria-hidden="true">
+            {c.souls.map((id, i) => (
+              <div class="walker" style={`--i:${i};--dur:${17 + i * 3}s;--delay:${-i * 6.5}s`}>
+                <Sprite id={id} scale={0.62} />
+              </div>
+            ))}
+          </div>
+        )}
+      </article>
+    ))
+  }
+</section>
+
+<script>
+  import { initDescent } from '../scripts/descent';
+  initDescent();
+</script>
+
+<style>
+  .descent {
+    position: relative;
+    isolation: isolate;
+    padding-top: clamp(3rem, 8vw, 6rem);
+  }
+
+  .descent__wash {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(120% 60% at 50% 0%, color-mix(in srgb, var(--wash) 30%, transparent), transparent 70%), var(--bg);
+    transition: background 0.8s ease;
+  }
+
+  .descent__intro {
+    max-width: 52rem;
+    padding-bottom: clamp(2.5rem, 6vw, 4.5rem);
+    text-align: center;
+  }
+
+  .descent__lede {
+    color: var(--ink-soft);
+    font-size: var(--step-1);
+  }
+
+  /* ----- Depth gauge ----- */
+  .gauge {
+    position: fixed;
+    z-index: 30;
+    left: max(0.8rem, env(safe-area-inset-left));
+    top: 50%;
+    translate: 0 -50%;
+    display: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+
+  .gauge.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .gauge ol {
+    position: relative;
+    display: grid;
+    gap: 0.15rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .gauge a {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 40px;
+    border-radius: 10px;
+    color: var(--ink-mute);
+    font-family: var(--font-hand);
+    font-size: 1.05rem;
+    text-decoration: none;
+    transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  }
+
+  .gauge a:hover {
+    color: var(--ink);
+    background: rgb(255 255 255 / 0.08);
+  }
+
+  .gauge a.is-active {
+    color: var(--parchment-ink);
+    background: var(--gold);
+    transform: scale(1.08);
+  }
+
+  .gauge__track {
+    position: absolute;
+    left: 50%;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 2px;
+    translate: -50% 0;
+    background: var(--line);
+  }
+
+  .gauge__fill {
+    height: 100%;
+    background: linear-gradient(var(--gold), var(--ember));
+    transform-origin: top;
+    transform: scaleY(0);
+  }
+
+  @media (min-width: 900px) {
+    .gauge {
+      display: block;
+    }
+  }
+
+  /* ----- Scenes ----- */
+  .scene {
+    position: relative;
+    display: grid;
+    align-items: start;
+    min-height: 100svh;
+    overflow: hidden;
+    isolation: isolate;
+    background: #0d0e14;
+  }
+
+  .scene__bg {
+    position: absolute;
+    inset: -8% 0;
+    z-index: -2;
+  }
+
+  .scene__bg :global(.scene__bgimg) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 60%;
+  }
+
+  .scene__shade {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(180deg, var(--bg) 0%, rgb(18 20 28 / 0.35) 14%, transparent 40%),
+      linear-gradient(0deg, rgb(13 14 20 / 0.75) 0%, transparent 28%);
+  }
+
+  .scene__inner {
+    display: grid;
+    gap: 1.25rem;
+    width: min(100% - 2 * var(--gutter), var(--max));
+    margin: 0 auto;
+    padding: calc(var(--header-h) + 2rem) 0 12.5rem;
+  }
+
+  .scene__card {
+    max-width: 34rem;
+    padding: clamp(1.1rem, 2.5vw, 1.8rem);
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--parchment) 94%, var(--c));
+    color: var(--parchment-ink);
+    box-shadow: var(--shadow), inset 0 0 0 1px rgb(255 255 255 / 0.4), inset 0 0 40px rgb(120 80 30 / 0.18);
+  }
+
+  .scene__num {
+    margin: 0 0 0.2em;
+    font-weight: 800;
+    font-size: var(--step--1);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--c) 70%, #2b2118);
+  }
+
+  .scene__num span {
+    letter-spacing: 0.04em;
+    text-transform: none;
+    opacity: 0.8;
+  }
+
+  .scene__name {
+    font-size: var(--step-4);
+    margin-bottom: 0.15em;
+    color: #24190f;
+  }
+
+  .scene__line {
+    font-size: var(--step-0);
+    margin-bottom: 0.9em;
+  }
+
+  .scene__hazard {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    margin: 0;
+    padding: 0.3em 0.8em;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--c) 85%, black);
+    color: #fff;
+    font-size: var(--step--1);
+    font-weight: 800;
+  }
+
+  .scene__hazard::before {
+    content: '⚠';
+    font-size: 0.9em;
+  }
+
+  .scene__boss {
+    margin: 0;
+    justify-self: end;
+    display: grid;
+    justify-items: center;
+    width: min(70vw, 340px);
+  }
+
+  .scene__bossart {
+    position: relative;
+    width: 100%;
+  }
+
+  .scene__bossart :global(.scene__bossimg) {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 18px 30px rgb(0 0 0 / 0.6));
+  }
+
+  .scene__bossart :global(.scene__bossimg--dormant) {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .scene__boss figcaption {
+    display: grid;
+    justify-items: center;
+    gap: 0.1rem;
+    margin-top: -0.4rem;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    background: rgb(12 13 19 / 0.82);
+    backdrop-filter: blur(4px);
+    text-align: center;
+  }
+
+  .scene__bossname {
+    font-family: var(--font-hand);
+    font-size: var(--step-1);
+    color: var(--gold);
+  }
+
+  .scene__quip {
+    font-size: var(--step--1);
+    font-style: italic;
+    color: var(--ink-soft);
+  }
+
+  /* Walking souls along the ground band */
+  .scene__souls {
+    position: absolute;
+    inset: auto 0 2.5rem;
+    height: 150px;
+    pointer-events: none;
+  }
+
+  .walker {
+    position: absolute;
+    left: 0;
+    bottom: calc(var(--i) * 10px);
+    animation: walk-across var(--dur) linear var(--delay) infinite;
+    animation-play-state: paused;
+  }
+
+  .walker :global(.sprite) {
+    animation-play-state: paused;
+    filter: drop-shadow(0 8px 6px rgb(0 0 0 / 0.45));
+  }
+
+  .scene.is-active .walker,
+  .scene.is-active .walker :global(.sprite) {
+    animation-play-state: running;
+  }
+
+  @keyframes walk-across {
+    from {
+      transform: translateX(-180px);
+    }
+    to {
+      transform: translateX(calc(100vw + 40px));
+    }
+  }
+
+  /* The Center: played straight. Darker, quieter, no jokes. */
+  .scene--center .scene__card {
+    background: rgb(14 16 30 / 0.85);
+    color: var(--ink);
+    box-shadow: var(--shadow), inset 0 0 0 1px rgb(160 170 255 / 0.25);
+    backdrop-filter: blur(6px);
+  }
+
+  .scene--center .scene__name {
+    color: #dfe4ff;
+  }
+
+  .scene--center .scene__num {
+    color: #a9b3ff;
+  }
+
+  .scene--center .scene__boss {
+    width: min(86vw, 520px);
+  }
+
+  @media (min-width: 900px) {
+    .scene {
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .scene__inner {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+      align-items: center;
+      padding: calc(var(--header-h) + 1rem) 0 9rem 3.5rem;
+    }
+
+    .scene__boss {
+      width: min(34vw, 440px);
+    }
+
+    .scene--center .scene__boss {
+      width: min(44vw, 620px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .walker {
+      animation: none;
+      transform: translateX(calc(12vw + var(--i) * 28vw));
+    }
+  }
+</style>

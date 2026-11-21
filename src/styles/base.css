@@ -1,0 +1,187 @@
+@import '@fontsource-variable/nunito/wght.css';
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--header-h) + 8px);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  overflow-x: clip;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* <picture> only chooses a source; let the <img> inside size against the parent. */
+picture {
+  display: contents;
+}
+
+img,
+svg,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-hand);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  margin: 0 0 0.4em;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0 0 1em;
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--gold);
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  color: #ffd27a;
+}
+
+:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.wrap {
+  width: min(100% - 2 * var(--gutter), var(--max));
+  margin-inline: auto;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100px;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  background: var(--gold);
+  color: var(--parchment-ink);
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  min-height: 48px;
+  padding: 0.7em 1.4em;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ffd27a, var(--gold) 45%, var(--gold-deep));
+  color: var(--parchment-ink);
+  font: 800 var(--step-0) / 1 var(--font-body);
+  text-decoration: none;
+  box-shadow: 0 6px 0 #7a4f14, 0 12px 30px rgb(242 184 75 / 0.25);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn:hover {
+  color: var(--parchment-ink);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 #7a4f14, 0 16px 34px rgb(242 184 75 / 0.35);
+}
+
+.btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 3px 0 #7a4f14;
+}
+
+.btn--ghost {
+  background: rgb(18 20 28 / 0.55);
+  color: var(--ink);
+  border: 1.5px solid var(--line);
+  box-shadow: none;
+  backdrop-filter: blur(6px);
+}
+
+.btn--ghost:hover {
+  color: var(--ink);
+  border-color: var(--gold);
+  box-shadow: none;
+}
+
+.eyebrow {
+  font-size: var(--step--1);
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.6em;
+}
+
+.section-title {
+  font-size: var(--step-3);
+}
+
+/* A walking soul: a horizontal strip of frames, stepped with CSS.
+   --w/--h: frame size, --n: frame count, --fps: frames per second. */
+.sprite {
+  width: calc(var(--w) * 1px * var(--scale, 1));
+  height: calc(var(--h) * 1px * var(--scale, 1));
+  background-image: var(--src);
+  background-repeat: no-repeat;
+  background-size: calc(var(--w) * var(--n) * 1px * var(--scale, 1)) 100%;
+  animation: sprite-frames calc(var(--n) / var(--fps) * 1s) steps(var(--n)) infinite;
+}
+
+@keyframes sprite-frames {
+  to {
+    background-position-x: calc(var(--w) * var(--n) * -1px * var(--scale, 1));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .sprite {
+    animation: none;
+  }
+}

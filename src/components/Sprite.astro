@@ -1,0 +1,25 @@
+---
+// A painted soul animated from its baked walk strip (public/sprites/<id>.webp).
+import sprites from '../data/sprites.json';
+
+interface Props {
+  id: string;
+  scale?: number;
+  label?: string;
+  class?: string;
+  style?: string;
+}
+const { id, scale = 1, label, class: cls = '', style = '' } = Astro.props;
+const s = (sprites as Record<string, { frames: number; width: number; height: number; fps: number }>)[id];
+if (!s) throw new Error(`Unknown sprite "${id}". Run npm run import-art.`);
+const url = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/sprites/${id}.webp`;
+---
+
+<div
+  class:list={['sprite', cls]}
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+  style={`--src:url('${url}');--w:${s.width};--h:${s.height};--n:${s.frames};--fps:${s.fps};--scale:${scale};${style}`}
+>
+</div>

@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Descent from '../components/Descent.astro';
+import Towers from '../components/Towers.astro';
+import Features from '../components/Features.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { site } from '../data/site';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': ['VideoGame', 'MobileApplication'],
+  name: site.name,
+  description: site.description,
+  url: site.url,
+  image: `${site.url}/og-card.jpg`,
+  genre: ['Tower defense', 'Strategy', 'Comedy'],
+  gamePlatform: ['iOS', 'iPadOS', 'Android'],
+  operatingSystem: 'iOS, Android',
+  applicationCategory: 'GameApplication',
+  playMode: 'SinglePlayer',
+  author: { '@type': 'Person', name: site.developer },
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+---
+
+<Base jsonLd={jsonLd}>
+  <Hero />
+  <Descent />
+  <Towers />
+  <Features />
+  <FinalCta />
+</Base>
+
+<script>
+  // Smooth scrolling on desktop only; phones keep native scrolling.
+  import Lenis from 'lenis';
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  const desktop = window.matchMedia('(pointer: fine) and (min-width: 900px)').matches;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (desktop && !reduce) {
+    const lenis = new Lenis({ anchors: { offset: -64 } });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((t) => lenis.raf(t * 1000));
+    gsap.ticker.lagSmoothing(0);
+  }
+</script>

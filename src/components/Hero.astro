@@ -1,0 +1,276 @@
+---
+import { Picture } from 'astro:assets';
+import keyart from '../assets/game/hero/keyart.webp';
+import StoreBadges from './StoreBadges.astro';
+import { site } from '../data/site';
+---
+
+<section class="hero" aria-labelledby="hero-title" data-hero>
+  <div class="hero__art" data-hero-art>
+    <Picture
+      src={keyart}
+      formats={['avif', 'webp']}
+      fallbackFormat="jpg"
+      widths={[640, 960, 1280, 1672]}
+      sizes="100vw"
+      alt="Dante and Virgil at the rim of the abyss, looking down a spiral of nine painted circles full of souls and towers."
+      loading="eager"
+      fetchpriority="high"
+      class="hero__img"
+    />
+  </div>
+  <canvas class="hero__embers" aria-hidden="true" data-embers></canvas>
+  <div class="hero__shade" aria-hidden="true"></div>
+
+  <div class="hero__content">
+    <p class="eyebrow">A tower defense comedy</p>
+    <h1 id="hero-title" class="hero__title">
+      DescentTD<span>Nine Circles</span>
+    </h1>
+    <p class="hero__line">{site.tagline}</p>
+    <StoreBadges />
+  </div>
+
+  <a class="hero__cue" href="#descent">
+    <svg class="lantern" viewBox="0 0 32 48" aria-hidden="true">
+      <path d="M16 2v5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path>
+      <rect x="9" y="7" width="14" height="4" rx="1.5" fill="currentColor"></rect>
+      <path d="M8 13h16l-2 24H10z" fill="rgb(242 184 75 / .18)" stroke="currentColor" stroke-width="2"></path>
+      <ellipse class="lantern__flame" cx="16" cy="26" rx="4" ry="6.5" fill="#ffcf6a"></ellipse>
+      <rect x="8" y="37" width="16" height="4" rx="1.5" fill="currentColor"></rect>
+    </svg>
+    <span>Descend</span>
+  </a>
+</section>
+
+<script>
+  const hero = document.querySelector<HTMLElement>('[data-hero]')!;
+  const art = document.querySelector<HTMLElement>('[data-hero-art]')!;
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-embers]')!;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = window.matchMedia('(pointer: fine)').matches;
+
+  // Mouse parallax on desktop: the painting drifts a little against the cursor.
+  if (finePointer && !reduce) {
+    let tx = 0, ty = 0, x = 0, y = 0, raf = 0;
+    const tick = () => {
+      x += (tx - x) * 0.08;
+      y += (ty - y) * 0.08;
+      art.style.transform = `translate3d(${x}px, ${y}px, 0) scale(1.06)`;
+      raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.1 ? requestAnimationFrame(tick) : 0;
+    };
+    hero.addEventListener('pointermove', (e) => {
+      const r = hero.getBoundingClientRect();
+      tx = -((e.clientX - r.left) / r.width - 0.5) * 24;
+      ty = -((e.clientY - r.top) / r.height - 0.5) * 16;
+      if (!raf) raf = requestAnimationFrame(tick);
+    });
+  }
+
+  // Drifting embers on a small canvas; paused off-screen and with reduced motion.
+  if (!reduce) {
+    const ctx = canvas.getContext('2d')!;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let w = 0, h = 0, running = false, raf = 0;
+    type Ember = { x: number; y: number; r: number; vy: number; vx: number; life: number; phase: number };
+    let embers: Ember[] = [];
+    const spawn = (anywhere = false): Ember => ({
+      x: Math.random() * w,
+      y: anywhere ? Math.random() * h : h + 10,
+      r: 0.8 + Math.random() * 2.2,
+      vy: 0.25 + Math.random() * 0.7,
+      vx: (Math.random() - 0.5) * 0.3,
+      life: 0.4 + Math.random() * 0.6,
+      phase: Math.random() * Math.PI * 2,
+    });
+    const resize = () => {
+      w = canvas.clientWidth;
+      h = canvas.clientHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const count = Math.round(Math.min(70, (w * h) / 22000));
+      embers = Array.from({ length: count }, () => spawn(true));
+    };
+    const draw = (t: number) => {
+      ctx.clearRect(0, 0, w, h);
+      ctx.globalCompositeOperation = 'lighter';
+      for (const e of embers) {
+        e.y -= e.vy;
+        e.x += e.vx + Math.sin(t / 900 + e.phase) * 0.25;
+        if (e.y < -10) Object.assign(e, spawn());
+        const a = e.life * Math.min(1, e.y / (h * 0.35));
+        const g = ctx.createRadialGradient(e.x, e.y, 0, e.x, e.y, e.r * 4);
+        g.addColorStop(0, `rgba(255,200,110,${a})`);
+        g.addColorStop(1, 'rgba(255,110,40,0)');
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(e.x, e.y, e.r * 4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      if (running) raf = requestAnimationFrame(draw);
+    };
+    resize();
+    window.addEventListener('resize', resize);
+    new IntersectionObserver(([entry]) => {
+      running = entry.isIntersecting;
+      cancelAnimationFrame(raf);
+      if (running) raf = requestAnimationFrame(draw);
+    }).observe(hero);
+  }
+</script>
+
+<style>
+  .hero {
+    position: relative;
+    display: grid;
+    align-items: end;
+    min-height: 100svh;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero__art {
+    position: absolute;
+    inset: 0;
+    z-index: -3;
+    transform: scale(1.06);
+    will-change: transform;
+  }
+
+  .hero__art :global(.hero__img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 4% 30%;
+  }
+
+  .hero__embers {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    pointer-events: none;
+  }
+
+  .hero__shade {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(180deg, rgb(18 20 28 / 0.55) 0%, transparent 18%),
+      linear-gradient(0deg, var(--bg) 0%, rgb(18 20 28 / 0.88) 22%, transparent 58%);
+  }
+
+  .hero__content {
+    width: min(100% - 2 * var(--gutter), var(--max));
+    margin: 0 auto;
+    padding-bottom: 7.5rem;
+  }
+
+  .hero__title {
+    font-size: var(--step-4);
+    text-shadow: 0 4px 24px rgb(0 0 0 / 0.7);
+    margin-bottom: 0.2em;
+  }
+
+  .hero__title span {
+    display: block;
+    font-size: 0.55em;
+    color: var(--gold);
+  }
+
+  .hero__line {
+    font-size: var(--step-1);
+    font-weight: 700;
+    max-width: 26ch;
+    text-shadow: 0 2px 12px rgb(0 0 0 / 0.8);
+    margin-bottom: 1.4rem;
+  }
+
+  .hero__cue {
+    position: absolute;
+    left: 50%;
+    bottom: 1.2rem;
+    translate: -50% 0;
+    display: grid;
+    justify-items: center;
+    gap: 0.15rem;
+    min-width: 64px;
+    padding: 0.3rem;
+    color: var(--gold);
+    font-family: var(--font-hand);
+    font-size: 1.05rem;
+    text-decoration: none;
+    animation: bob 2.4s ease-in-out infinite;
+  }
+
+  .lantern {
+    width: 26px;
+    height: 39px;
+    filter: drop-shadow(0 0 10px rgb(255 190 90 / 0.7));
+  }
+
+  .lantern__flame {
+    transform-origin: 16px 30px;
+    animation: flicker 1.3s ease-in-out infinite alternate;
+  }
+
+  @keyframes bob {
+    50% {
+      transform: translateY(8px);
+    }
+  }
+
+  @keyframes flicker {
+    from {
+      transform: scale(0.9, 0.95);
+      opacity: 0.85;
+    }
+    to {
+      transform: scale(1.05, 1.08);
+      opacity: 1;
+    }
+  }
+
+  /* Desktop: the text sits in the dark sky on the right of the painting. */
+  @media (min-width: 900px) {
+    .hero {
+      align-items: center;
+    }
+
+    .hero__art :global(.hero__img) {
+      object-position: 0% 40%;
+    }
+
+    .hero__shade {
+      background:
+        linear-gradient(180deg, rgb(18 20 28 / 0.5) 0%, transparent 14%),
+        linear-gradient(270deg, rgb(12 14 20 / 0.92) 0%, rgb(12 14 20 / 0.65) 30%, transparent 55%),
+        linear-gradient(0deg, var(--bg) 0%, transparent 18%);
+    }
+
+    .hero__content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      text-align: right;
+      padding: 0;
+    }
+
+    .hero__line {
+      max-width: 22ch;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .hero__cue {
+      display: none;
+    }
+
+    .hero__content {
+      padding-bottom: 6.5rem;
+    }
+  }
+</style>

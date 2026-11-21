@@ -1,0 +1,224 @@
+---
+import { Image } from 'astro:assets';
+import icon from '../assets/game/brand/app-icon.webp';
+import { site } from '../data/site';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const home = `${base}/`;
+const links = [
+  { href: `${home}#descent`, label: 'The Circles' },
+  { href: `${home}#towers`, label: 'Towers' },
+  { href: `${base}/support/`, label: 'Support' },
+  { href: `${base}/privacy/`, label: 'Privacy' },
+];
+const cta = site.launched ? 'Play free' : 'Coming soon';
+---
+
+<header class="header" data-header>
+  <div class="header__inner">
+    <a class="brand" href={home} aria-label={`${site.name}, home`}>
+      <Image src={icon} alt="" width={40} height={40} class="brand__icon" loading="eager" />
+      <span class="brand__name">DescentTD<span class="brand__sub">Nine Circles</span></span>
+    </a>
+
+    <nav class="nav" aria-label="Main">
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-list" data-nav-toggle>
+        <span class="visually-hidden">Menu</span>
+        <span class="burger" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <ul class="nav__list" id="nav-list" data-nav-list>
+        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <a class="btn header__cta" href={`${home}#play`}>{cta}</a>
+  </div>
+</header>
+
+{site.launched && <a class="mobile-cta btn" href={`${home}#play`}>{cta}</a>}
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]')!;
+  const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]')!;
+  const list = document.querySelector<HTMLElement>('[data-nav-list]')!;
+
+  const setOpen = (open: boolean) => {
+    toggle.setAttribute('aria-expanded', String(open));
+    header.classList.toggle('is-open', open);
+  };
+  toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+  list.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('a')) setOpen(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setOpen(false);
+  });
+
+  const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 24);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+</script>
+
+<style>
+  .header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .header.is-scrolled,
+  .header.is-open {
+    background: rgb(18 20 28 / 0.86);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 1px 0 var(--line);
+  }
+
+  .header__inner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: var(--header-h);
+    width: min(100% - 2 * var(--gutter), 1400px);
+    margin-inline: auto;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--ink);
+    text-decoration: none;
+    margin-right: auto;
+  }
+
+  .brand__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgb(0 0 0 / 0.5);
+  }
+
+  .brand__name {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-hand);
+    font-size: 1.35rem;
+    line-height: 1;
+  }
+
+  .brand__sub {
+    font-size: 0.8rem;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+  }
+
+  .nav__list {
+    display: flex;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .nav__list a {
+    display: block;
+    padding: 0.6rem 0.9rem;
+    border-radius: 8px;
+    color: var(--ink);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .nav__list a:hover {
+    background: rgb(255 255 255 / 0.07);
+    color: var(--gold);
+  }
+
+  .header__cta {
+    min-height: 42px;
+    padding: 0.55em 1.2em;
+    font-size: 0.95rem;
+  }
+
+  .nav__toggle {
+    display: none;
+  }
+
+  .mobile-cta {
+    display: none;
+  }
+
+  @media (max-width: 860px) {
+    .header__cta {
+      display: none;
+    }
+
+    .nav__toggle {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border: 0;
+      border-radius: 10px;
+      background: rgb(255 255 255 / 0.06);
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    .burger {
+      display: grid;
+      gap: 5px;
+    }
+
+    .burger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      border-radius: 2px;
+      background: currentColor;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .is-open .burger span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    .is-open .burger span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .is-open .burger span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    .nav__list {
+      position: absolute;
+      inset: var(--header-h) 0 auto;
+      flex-direction: column;
+      padding: 0.5rem var(--gutter) 1.2rem;
+      background: rgb(18 20 28 / 0.96);
+      box-shadow: 0 20px 30px rgb(0 0 0 / 0.4);
+      display: none;
+    }
+
+    .is-open .nav__list {
+      display: flex;
+    }
+
+    .nav__list a {
+      padding: 0.9rem 0.5rem;
+      font-size: 1.1rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .mobile-cta {
+      display: flex;
+      position: fixed;
+      z-index: 40;
+      left: 1rem;
+      right: 1rem;
+      bottom: calc(0.9rem + env(safe-area-inset-bottom));
+    }
+  }
+</style>

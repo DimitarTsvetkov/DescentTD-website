@@ -1,0 +1,281 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { towers, tiers } from '../data/towers';
+
+const art = import.meta.glob<{ default: ImageMetadata }>('../assets/game/towers/*.webp', { eager: true });
+const towerImg = (id: string, tier: string) => {
+  const m = art[`../assets/game/towers/${id}-${tier}.webp`];
+  if (!m) throw new Error(`Missing towers/${id}-${tier}.webp. Run npm run import-art.`);
+  return m.default;
+};
+const tierLabel = (t: string, tw: (typeof towers)[number]) =>
+  t === 't4a' ? `Tier 4: ${tw.t4a}` : t === 't4b' ? `Tier 4: ${tw.t4b}` : `Tier ${t.slice(1)}`;
+---
+
+<section id="towers" class="towers" aria-labelledby="towers-title">
+  <div class="wrap towers__head">
+    <div>
+      <p class="eyebrow">12 towers · 60 paintings</p>
+      <h2 id="towers-title" class="section-title">Build your defences. Hell has opinions.</h2>
+      <p class="towers__lede">
+        Every tower takes three upgrades, then splits into one of two very different Tier 4 paths. Tap a tower to see
+        it grow.
+      </p>
+    </div>
+    <div class="towers__arrows">
+      <button class="arrow" type="button" data-scroll="-1" aria-label="Previous towers">‹</button>
+      <button class="arrow" type="button" data-scroll="1" aria-label="Next towers">›</button>
+    </div>
+  </div>
+
+  <ul class="rail" data-rail>
+    {
+      towers.map((tw) => (
+        <li class="tower">
+          <button class="tower__btn" type="button" data-tower data-tier="0" aria-label={`${tw.name}: show the next tier`}>
+            <div class="tower__stage">
+              {tiers.map((t, i) => (
+                <Image
+                  src={towerImg(tw.id, t)}
+                  widths={[200, 320]}
+                  sizes="200px"
+                  alt={i === 0 ? `${tw.name}, tier 1` : ''}
+                  class:list={['tower__img', { 'is-shown': i === 0 }]}
+                  data-tier-img={i}
+                  data-alt={`${tw.name}, ${tierLabel(t, tw)}`}
+                />
+              ))}
+            </div>
+            <span class="tower__pips" aria-hidden="true">
+              {tiers.map((_, i) => (
+                <span class:list={['pip', { 'is-on': i === 0 }]} />
+              ))}
+            </span>
+          </button>
+          <div class="tower__text">
+            <h3 class="tower__name">{tw.name}</h3>
+            <p class="tower__role">{tw.role}</p>
+            <p class="tower__tier" aria-live="polite" data-tier-label>
+              Tier 1
+            </p>
+            <p class="tower__line">{tw.line}</p>
+            <p class="tower__branches">
+              <span>{tw.t4a}</span> or <span>{tw.t4b}</span>
+            </p>
+          </div>
+          <template data-labels>{JSON.stringify(tiers.map((t) => tierLabel(t, tw)))}</template>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<script>
+  const rail = document.querySelector<HTMLElement>('[data-rail]')!;
+
+  document.querySelectorAll<HTMLButtonElement>('[data-scroll]').forEach((b) =>
+    b.addEventListener('click', () => {
+      const card = rail.querySelector<HTMLElement>('.tower');
+      const step = (card?.offsetWidth ?? 280) + 16;
+      rail.scrollBy({ left: Number(b.dataset.scroll) * step * 2, behavior: 'smooth' });
+    }),
+  );
+
+  document.querySelectorAll<HTMLButtonElement>('[data-tower]').forEach((btn) => {
+    const li = btn.closest('li')!;
+    const imgs = [...btn.querySelectorAll<HTMLImageElement>('[data-tier-img]')];
+    const pips = [...btn.querySelectorAll('.pip')];
+    const label = li.querySelector<HTMLElement>('[data-tier-label]')!;
+    const labels: string[] = JSON.parse(li.querySelector('template')!.innerHTML);
+    btn.addEventListener('click', () => {
+      const next = (Number(btn.dataset.tier) + 1) % imgs.length;
+      btn.dataset.tier = String(next);
+      imgs.forEach((img, i) => {
+        img.classList.toggle('is-shown', i === next);
+        img.alt = i === next ? (img.dataset.alt ?? '') : '';
+      });
+      pips.forEach((p, i) => p.classList.toggle('is-on', i <= next));
+      label.textContent = labels[next];
+      btn.classList.remove('pop');
+      void btn.offsetWidth;
+      btn.classList.add('pop');
+    });
+  });
+</script>
+
+<style>
+  .towers {
+    position: relative;
+    z-index: 1;
+    padding: clamp(4rem, 9vw, 7rem) 0;
+    background:
+      radial-gradient(80% 50% at 50% 0%, rgb(242 184 75 / 0.08), transparent 70%),
+      var(--bg);
+  }
+
+  .towers__head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .towers__lede {
+    color: var(--ink-soft);
+    max-width: 40rem;
+    margin: 0;
+  }
+
+  .towers__arrows {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .arrow {
+    width: 48px;
+    height: 48px;
+    border: 1.5px solid var(--line);
+    border-radius: 50%;
+    background: var(--bg-2);
+    color: var(--ink);
+    font-size: 1.6rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .arrow:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .rail {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min(78vw, 300px);
+    gap: 1rem;
+    margin: 0;
+    padding: 0.5rem max(var(--gutter), calc((100vw - var(--max)) / 2)) 1.5rem;
+    list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: max(var(--gutter), calc((100vw - var(--max)) / 2));
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold-deep) transparent;
+  }
+
+  .tower {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    scroll-snap-align: start;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(180deg, var(--bg-3), var(--bg-2));
+    border: 1px solid var(--line);
+    overflow: hidden;
+  }
+
+  .tower__btn {
+    display: grid;
+    justify-items: center;
+    gap: 0.6rem;
+    padding: 1.2rem 1rem 0.9rem;
+    border: 0;
+    background: radial-gradient(70% 60% at 50% 70%, rgb(242 184 75 / 0.18), transparent 70%);
+    cursor: pointer;
+    color: inherit;
+  }
+
+  .tower__stage {
+    display: grid;
+    place-items: end center;
+    width: 100%;
+    height: 210px;
+  }
+
+  .tower__stage :global(.tower__img) {
+    grid-area: 1 / 1;
+    max-height: 210px;
+    width: auto;
+    opacity: 0;
+    transform: scale(0.92);
+    transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    filter: drop-shadow(0 12px 12px rgb(0 0 0 / 0.5));
+  }
+
+  .tower__stage :global(.tower__img.is-shown) {
+    opacity: 1;
+    transform: none;
+  }
+
+  .tower__btn.pop .tower__stage {
+    animation: pop 0.35s ease;
+  }
+
+  @keyframes pop {
+    40% {
+      transform: scale(1.06, 0.94);
+    }
+  }
+
+  .tower__pips {
+    display: flex;
+    gap: 6px;
+  }
+
+  .pip {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1.5px solid var(--gold);
+  }
+
+  .pip.is-on {
+    background: var(--gold);
+  }
+
+  .tower__text {
+    padding: 0.4rem 1.2rem 1.3rem;
+  }
+
+  .tower__name {
+    font-size: var(--step-2);
+    margin-bottom: 0.1em;
+  }
+
+  .tower__role {
+    margin: 0 0 0.3em;
+    font-size: var(--step--1);
+    font-weight: 800;
+    color: var(--gold);
+    letter-spacing: 0.04em;
+  }
+
+  .tower__tier {
+    margin: 0 0 0.6em;
+    font-size: var(--step--1);
+    color: var(--ink-mute);
+  }
+
+  .tower__line {
+    color: var(--ink-soft);
+    font-size: 0.98rem;
+  }
+
+  .tower__branches {
+    margin: 0;
+    font-size: var(--step--1);
+    color: var(--ink-mute);
+  }
+
+  .tower__branches span {
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  @media (max-width: 640px) {
+    .towers__arrows {
+      display: none;
+    }
+  }
+</style>
