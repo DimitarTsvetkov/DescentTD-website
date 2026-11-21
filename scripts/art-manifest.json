@@ -736,6 +736,382 @@
     384,
     384
    ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C1_BOS_EndlessDebater_Painted.png",
+   "to": "circles/c1/bos-endlessdebater.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C1_BOS_LostPhilosopher_Painted.png",
+   "to": "circles/c1/bos-lostphilosopher.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C1_BOS_Counterpoint_Painted.png",
+   "to": "circles/c1/bos-counterpoint.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C2_BOS_WhirlwindWaltz_Painted.png",
+   "to": "circles/c2/bos-whirlwindwaltz.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C2_BOS_Minos_Painted.png",
+   "to": "circles/c2/bos-minos.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C3_BOS_EndlessAppetite_Painted.png",
+   "to": "circles/c3/bos-endlessappetite.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C3_BOS_ThreeHeadedHound_Painted.png",
+   "to": "circles/c3/bos-threeheadedhound.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C4_BOS_DebtCollector_Painted.png",
+   "to": "circles/c4/bos-debtcollector.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C4_BOS_Plutus_Painted.png",
+   "to": "circles/c4/bos-plutus.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C5_BOS_TantrumTitan_Painted.png",
+   "to": "circles/c5/bos-tantrumtitan.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C5_BOS_Ferryman_Painted.png",
+   "to": "circles/c5/bos-ferryman.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C6_BOS_Gorgon_Painted.png",
+   "to": "circles/c6/bos-gorgon.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C6_BOS_Gatekeeper_Painted.png",
+   "to": "circles/c6/bos-gatekeeper.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C7_BOS_LittleBrother_Painted.png",
+   "to": "circles/c7/bos-littlebrother.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C7_BOS_Minotaur_Painted.png",
+   "to": "circles/c7/bos-minotaur.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C8_BOS_GrandGrifter_Painted.png",
+   "to": "circles/c8/bos-grandgrifter.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C8_BOS_Geryon_Painted.png",
+   "to": "circles/c8/bos-geryon.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C9_BOS_DoubleCrosser_Painted.png",
+   "to": "circles/c9/bos-doublecrosser.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C9_BOS_TwinGiants_Painted.png",
+   "to": "circles/c9/bos-twingiants.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C9_BOS_TwinGiantsB_Painted.png",
+   "to": "circles/c9/bos-twingiantsb.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C10_BOS_FrozenEmperor_Painted.png",
+   "to": "circles/c10/bos-frozenemperor.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C10_BOS_FrozenEmperor_Face2_Painted.png",
+   "to": "circles/c10/bos-frozenemperor_face2.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C10_BOS_FrozenEmperor_Face3_Painted.png",
+   "to": "circles/c10/bos-frozenemperor_face3.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C1_Limbo/C1_Prop_DeadTree.png",
+   "to": "circles/c1/prop-a.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C1_Limbo/C1_Prop_BrokenColumn.png",
+   "to": "circles/c1/prop-b.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C2_Lust/C2_Prop_WindsweptTree01.png",
+   "to": "circles/c2/prop-a.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C2_Lust/C2_Prop_RibbonPost.png",
+   "to": "circles/c2/prop-b.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C3_Gluttony/C3_Prop_BigPlate.png",
+   "to": "circles/c3/prop-a.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C3_Gluttony/C3_Prop_Awning.png",
+   "to": "circles/c3/prop-b.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C4_Greed/C4_Prop_CoinPile.png",
+   "to": "circles/c4/prop-a.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C4_Greed/C4_Prop_Chest.png",
+   "to": "circles/c4/prop-b.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C5_Wrath/C5_Prop_Reeds.png",
+   "to": "circles/c5/prop-a.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C5_Wrath/C5_Prop_DockPost.png",
+   "to": "circles/c5/prop-b.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C6_Heresy/C6_Prop_Sarcophagus.png",
+   "to": "circles/c6/prop-a.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C6_Heresy/C6_Prop_RuinedArch.png",
+   "to": "circles/c6/prop-b.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C7_Violence/C7_Prop_ThornTree.png",
+   "to": "circles/c7/prop-a.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C7_Violence/C7_Prop_Cactus.png",
+   "to": "circles/c7/prop-b.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C8_Fraud/C8_Prop_MaskPile.png",
+   "to": "circles/c8/prop-a.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C8_Fraud/C8_Prop_BrokenBridge.png",
+   "to": "circles/c8/prop-b.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C9_Treachery/C9_Prop_FrozenPillar.png",
+   "to": "circles/c9/prop-a.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C9_Treachery/C9_Prop_IceSpike.png",
+   "to": "circles/c9/prop-b.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C10_TheCenter/C10_Prop_IceSpire.png",
+   "to": "circles/c10/prop-a.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/C10_TheCenter/C10_Prop_FrozenWave.png",
+   "to": "circles/c10/prop-b.webp",
+   "max": [
+    900,
+    900
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Characters/UI_PRT_Virgil_Neutral.png",
+   "to": "characters/virgil-neutral.webp",
+   "max": [
+    384,
+    384
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Characters/UI_PRT_Dante_Terrified.png",
+   "to": "characters/dante-terrified.webp",
+   "max": [
+    384,
+    384
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Characters/UI_PRT_Dante_Inspired.png",
+   "to": "characters/dante-inspired.webp",
+   "max": [
+    384,
+    384
+   ]
+  },
+  {
+   "from": "Assets/Art/Painted/Characters/UI_PRT_Virgil_Alarmed.png",
+   "to": "characters/virgil-alarmed.webp",
+   "max": [
+    384,
+    384
+   ]
   }
  ],
  "sprites": [
@@ -883,6 +1259,46 @@
    "from": "Assets/Art/Painted/Ending/END_CHR_Virgil_LookUp.png",
    "to": "virgil-lookup.webp",
    "height": 360
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C2_ENM_LonelyHalf_Walk_Painted.png",
+   "to": "c2-lonelyhalf.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C3_ENM_SnackSizedSoul_Walk_Painted.png",
+   "to": "c3-snacksizedsoul.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C7_ENM_ThornWraith_Walk_Painted.png",
+   "to": "c7-thornwraith.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C8_ENM_FalseCounselor_Walk_Painted.png",
+   "to": "c8-falsecounselor.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C8_ENM_Hypocrite_Walk_Painted.png",
+   "to": "c8-hypocrite.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C9_ENM_CrossHalf_Walk_Painted.png",
+   "to": "c9-crosshalf.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/Souls/C9_ENM_Turncoat_Walk_Painted.png",
+   "to": "c9-turncoat.webp",
+   "height": 220
+  },
+  {
+   "from": "Assets/Art/Painted/FX/FX_JCE_Poof.png",
+   "to": "fx-poof.webp",
+   "height": 200
   }
  ],
  "font": {

@@ -172,5 +172,53 @@
   "width": 176,
   "height": 360,
   "fps": 4
+ },
+ "c2-lonelyhalf": {
+  "frames": 8,
+  "width": 241,
+  "height": 220,
+  "fps": 8
+ },
+ "c3-snacksizedsoul": {
+  "frames": 8,
+  "width": 251,
+  "height": 220,
+  "fps": 8
+ },
+ "c7-thornwraith": {
+  "frames": 8,
+  "width": 194,
+  "height": 220,
+  "fps": 8
+ },
+ "c8-falsecounselor": {
+  "frames": 8,
+  "width": 129,
+  "height": 220,
+  "fps": 8
+ },
+ "c8-hypocrite": {
+  "frames": 8,
+  "width": 194,
+  "height": 220,
+  "fps": 8
+ },
+ "c9-crosshalf": {
+  "frames": 8,
+  "width": 142,
+  "height": 220,
+  "fps": 8
+ },
+ "c9-turncoat": {
+  "frames": 8,
+  "width": 155,
+  "height": 220,
+  "fps": 8
+ },
+ "fx-poof": {
+  "frames": 8,
+  "width": 200,
+  "height": 200,
+  "fps": 18
  }
 }

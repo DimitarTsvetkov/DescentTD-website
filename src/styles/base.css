@@ -157,6 +157,7 @@ a:hover {
 /* A walking soul: a horizontal strip of frames, stepped with CSS.
    --w/--h: frame size, --n: frame count, --fps: frames per second. */
 .sprite {
+  display: block;
   width: calc(var(--w) * 1px * var(--scale, 1));
   height: calc(var(--h) * 1px * var(--scale, 1));
   background-image: var(--src);

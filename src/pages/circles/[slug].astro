@@ -1,0 +1,1350 @@
+---
+import { Image, Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Base from '../../layouts/Base.astro';
+import Sprite from '../../components/Sprite.astro';
+import StoreBadges from '../../components/StoreBadges.astro';
+import { circles, circleSlug, type Circle } from '../../data/circles';
+import { circlePages, type CirclePage } from '../../data/circlePages';
+import { towers, tiers } from '../../data/towers';
+import { site } from '../../data/site';
+
+import virgilDeadpan from '../../assets/game/characters/virgil-deadpan.webp';
+import virgilNeutral from '../../assets/game/characters/virgil-neutral.webp';
+import danteWorried from '../../assets/game/characters/dante-worried.webp';
+import danteTerrified from '../../assets/game/characters/dante-terrified.webp';
+
+export function getStaticPaths() {
+  return circles.map((c, i) => ({
+    params: { slug: circleSlug(c) },
+    props: { c, page: circlePages.find((p) => p.n === c.n)!, prev: circles[i - 1], next: circles[i + 1] },
+  }));
+}
+
+interface Props {
+  c: Circle;
+  page: CirclePage;
+  prev?: Circle;
+  next?: Circle;
+}
+const { c, page, prev, next } = Astro.props;
+const center = c.n === 10;
+
+const art = import.meta.glob<{ default: ImageMetadata }>('../../assets/game/circles/*/*.webp', { eager: true });
+const img = (n: number, file: string) => {
+  const m = art[`../../assets/game/circles/c${n}/${file}.webp`];
+  if (!m) throw new Error(`Missing circles/c${n}/${file}.webp. Run npm run import-art.`);
+  return m.default;
+};
+const towerArt = import.meta.glob<{ default: ImageMetadata }>('../../assets/game/towers/*.webp', { eager: true });
+const towerImg = (id: string, tier: string) => towerArt[`../../assets/game/towers/${id}-${tier}.webp`].default;
+const tierLabel = (t: string, tw: (typeof towers)[number]) =>
+  t === 't4a' ? `Tier 4A: ${tw.t4a}` : t === 't4b' ? `Tier 4B: ${tw.t4b}` : `Tier ${t.slice(1)}`;
+const newTowers = page.towers.map((id) => towers.find((t) => t.id === id)!);
+
+const portraits = {
+  virgil: center ? virgilNeutral : virgilDeadpan,
+  dante: center ? danteTerrified : danteWorried,
+};
+const speaker = { virgil: 'Virgil', dante: 'Dante', soul: 'A soul' };
+
+// The Center has no souls of its own: its parade is echoes from every circle.
+const paradeIds = center ? circlePages.flatMap((p) => p.souls.map((s) => s.sprite)) : page.souls.map((s) => s.sprite);
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const url = (path: string) => `${base}${path}`;
+const label = center ? 'The bottom' : `Circle ${c.numeral}`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${site.url}/` },
+    { '@type': 'ListItem', position: 2, name: 'The Circles', item: `${site.url}/circles/` },
+    { '@type': 'ListItem', position: 3, name: c.name, item: `${site.url}/circles/${circleSlug(c)}/` },
+  ],
+};
+---
+
+<Base title={page.title} description={page.description} jsonLd={jsonLd}>
+  <div class="ch" style={`--c:${c.colour}`}>
+    <!-- ===== Hero ===== -->
+    <section class="ch-hero" data-ch-hero aria-labelledby="ch-title">
+      <div class="ch-hero__bg" data-depth="0.12">
+        <Picture
+          src={img(c.n, 'backdrop')}
+          formats={['avif', 'webp']}
+          fallbackFormat="jpg"
+          widths={[640, 1024, 1600, 2048]}
+          sizes="100vw"
+          alt=""
+          loading="eager"
+          fetchpriority="high"
+          class="ch-hero__bgimg"
+        />
+      </div>
+      <canvas class="ch-hero__fx" data-particles={page.particle} aria-hidden="true"></canvas>
+      <div class="ch-hero__prop ch-hero__prop--a" data-depth="0.55" aria-hidden="true">
+        <Image src={img(c.n, 'prop-a')} widths={[300, 600]} sizes="(min-width: 900px) 28vw, 45vw" alt="" />
+      </div>
+      <div class="ch-hero__prop ch-hero__prop--b" data-depth="0.8" aria-hidden="true">
+        <Image src={img(c.n, 'prop-b')} widths={[300, 600]} sizes="(min-width: 900px) 24vw, 40vw" alt="" />
+      </div>
+      <div class="ch-hero__shade" aria-hidden="true"></div>
+      <span class="ch-hero__numeral" aria-hidden="true">{c.numeral}</span>
+
+      <div class="ch-hero__content wrap">
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <ol>
+            <li><a href={url('/')}>Home</a></li>
+            <li><a href={url('/circles/')}>The Circles</a></li>
+            <li aria-current="page">{c.name}</li>
+          </ol>
+        </nav>
+        <p class="eyebrow">{label} · {c.levels.startsWith('Level') ? c.levels : `Levels ${c.levels}`}</p>
+        <h1 id="ch-title" class="ch-hero__title">{c.name}</h1>
+        <p class="ch-hero__line">{c.line}</p>
+        <ul class="chips" aria-label="At a glance">
+          <li class="chip chip--hazard">{c.hazard}</li>
+          {page.souls.length > 0 && <li class="chip">{page.souls.length} kinds of soul</li>}
+          <li class="chip">{page.bosses.length === 1 ? '1 boss' : `${page.bosses.length} bosses`}</li>
+          {newTowers.length > 0 && <li class="chip">{newTowers.length === 1 ? '1 new tower' : `${newTowers.length} new towers`}</li>}
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== Briefing ===== -->
+    <section class="briefing wrap" aria-labelledby="brief-title">
+      <h2 id="brief-title" class="visually-hidden">Briefing</h2>
+      <ol class="chat" data-briefing>
+        {
+          page.briefing.map((l) => (
+            <li class:list={['chat__line', `chat__line--${l.who}`]} data-line>
+              {l.who !== 'soul' && (
+                <Image src={portraits[l.who]} width={72} height={72} alt="" class="chat__face" />
+              )}
+              <div class="chat__bubble">
+                <span class="chat__who">{speaker[l.who]}</span>
+                <span class="chat__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                <p class="chat__text">{l.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <!-- ===== About ===== -->
+    <section class="about wrap" aria-labelledby="about-title">
+      <h2 id="about-title" class="section-title">{center ? 'The bottom of everything' : `The circle of ${c.name.toLowerCase()}`}</h2>
+      <div class="about__cols">
+        <div class="about__col">
+          <h3>In Dante’s poem</h3>
+          {page.poem.map((p) => <p>{p}</p>)}
+        </div>
+        <div class="about__col about__col--game">
+          <h3>In DescentTD</h3>
+          {page.game.map((p) => <p>{p}</p>)}
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Souls ===== -->
+    {
+      page.souls.length > 0 && (
+        <section class="souls wrap" aria-labelledby="souls-title">
+          <p class="eyebrow">Meet the damned</p>
+          <h2 id="souls-title" class="section-title">The souls of {c.name}</h2>
+          <p class="section-lede">Every soul’s sin is its joke. Tap a card to see how it loses.</p>
+          <ul class="souls__grid">
+            {page.souls.map((s) => (
+              <li class="soul" data-soul>
+                <div class="soul__inner">
+                  <div class="soul__face soul__face--front">
+                    <div class="soul__stage">
+                      <Sprite id={s.sprite} scale={0.72} />
+                    </div>
+                    <h3 class="soul__name">
+                      {s.name}
+                      {s.flier && <span class="soul__tag">Flies</span>}
+                    </h3>
+                    <p class="soul__about">{s.about}</p>
+                  </div>
+                  <div class="soul__face soul__face--back">
+                    <h4 class="soul__backtitle">{s.name}</h4>
+                    <ul class="soul__gags">
+                      {s.gags.map((g) => (
+                        <li>{g}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+                <button class="soul__flip" type="button" aria-pressed="false" data-flip>
+                  How it loses
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <!-- ===== Hazard + advice ===== -->
+    <section class="intel wrap" aria-labelledby="intel-title">
+      <h2 id="intel-title" class="visually-hidden">Hazard and strategy</h2>
+      <div class="intel__hazard">
+        <p class="eyebrow">The hazard</p>
+        <h3 class="intel__name">{page.hazard.name}</h3>
+        <p>{page.hazard.text}</p>
+      </div>
+      <div class="intel__advice">
+        <Image src={portraits.virgil} width={96} height={96} alt="Virgil" class="intel__face" />
+        <div>
+          <p class="eyebrow">Virgil’s advice</p>
+          <ul>
+            {page.advice.map((a) => <li>{a}</li>)}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Bosses ===== -->
+    <section class="bosses wrap" aria-labelledby="boss-title">
+      <p class="eyebrow">{center ? 'The last level' : 'Levels ' + page.bosses.map((b) => b.level).join(' & ')}</p>
+      <h2 id="boss-title" class="section-title">{center ? 'The Frozen Emperor' : 'The bosses'}</h2>
+      <div class:list={['bosses__grid', { 'bosses__grid--one': page.bosses.length === 1 }]}>
+        {
+          page.bosses.map((b) => (
+            <article class:list={['boss', { 'boss--main': b.role !== 'Mini-boss' }]} data-tilt>
+              <div class="boss__art">
+                <Image
+                  src={img(c.n, b.img)}
+                  widths={[360, 720]}
+                  sizes="(min-width: 900px) 40vw, 86vw"
+                  alt={`${b.name}, ${b.role.toLowerCase()} of ${c.name}`}
+                  class="boss__img"
+                />
+              </div>
+              <div class="boss__body">
+                <p class="boss__role">
+                  {b.role} · Level {b.level}
+                </p>
+                <h3 class="boss__name">{b.name}</h3>
+                {b.quip && <p class="boss__quip">“{b.quip}”</p>}
+                <p>{b.about}</p>
+                <dl class="boss__beats">
+                  <div>
+                    <dt>Entrance</dt>
+                    <dd>{b.entrance}</dd>
+                  </div>
+                  <div>
+                    <dt>Defeat</dt>
+                    <dd>{b.defeat}</dd>
+                  </div>
+                </dl>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ===== New towers ===== -->
+    {
+      newTowers.length > 0 && (
+        <section class="newtowers wrap" aria-labelledby="nt-title">
+          <p class="eyebrow">Unlocked in {c.name}</p>
+          <h2 id="nt-title" class="section-title">{newTowers.length === 1 ? 'A new tower' : 'New towers'}</h2>
+          <div class="newtowers__grid">
+            {newTowers.map((tw) => (
+              <article class="nt" data-tower-card>
+                <div class="nt__stage">
+                  {tiers.map((t, i) => (
+                    <Image
+                      src={towerImg(tw.id, t)}
+                      widths={[220, 420]}
+                      sizes="220px"
+                      alt={i === 0 ? `${tw.name}, tier 1` : ''}
+                      class:list={['nt__big', { 'is-shown': i === 0 }]}
+                      data-tier-big
+                    />
+                  ))}
+                </div>
+                <div class="nt__body">
+                  <h3 class="nt__name">{tw.name}</h3>
+                  <p class="nt__role">{tw.role}</p>
+                  <p class="nt__line">{tw.line}</p>
+                  <p class="nt__tier" aria-live="polite" data-tier-name>
+                    Tier 1
+                  </p>
+                  <div class="nt__thumbs" role="group" aria-label={`${tw.name} tiers`}>
+                    {tiers.map((t, i) => (
+                      <button type="button" class="nt__thumb" aria-pressed={i === 0 ? 'true' : 'false'} data-tier-thumb data-label={tierLabel(t, tw)}>
+                        <Image src={towerImg(tw.id, t)} width={56} height={56} alt={tierLabel(t, tw)} />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <!-- ===== Parade mini-game ===== -->
+    <section class="parade" data-parade={JSON.stringify(paradeIds)} data-echo={center ? '' : undefined} aria-labelledby="parade-title">
+      <div class="wrap parade__head">
+        <div>
+          <p class="eyebrow">Try it</p>
+          <h2 id="parade-title" class="section-title">{center ? 'Echoes from every circle' : 'Seal the souls'}</h2>
+          <p class="section-lede">Tap the souls before they reach the far side.</p>
+        </div>
+        <p class="parade__score" aria-live="polite">
+          <span><b data-sealed>0</b> sealed</span>
+          <span><b data-escaped>0</b> escaped</span>
+        </p>
+      </div>
+      <div class="parade__field" data-parade-field>
+        <Picture src={img(c.n, 'backdrop')} formats={['avif', 'webp']} fallbackFormat="jpg" widths={[640, 1280, 2048]} sizes="100vw" alt="" class="parade__bg" />
+      </div>
+      <p class="parade__quip wrap" data-parade-quip aria-live="polite">&nbsp;</p>
+    </section>
+
+    <!-- ===== Next / previous ===== -->
+    <nav class="pager wrap" aria-label="Circles">
+      {
+        prev ? (
+          <a class="pager__card pager__card--prev" href={url(`/circles/${circleSlug(prev)}/`)} style={`--pc:${prev.colour}`}>
+            <Image src={img(prev.n, 'backdrop')} widths={[480, 900]} sizes="(min-width: 700px) 45vw, 92vw" alt="" class="pager__img" />
+            <span class="pager__text">
+              <span class="pager__dir">← Back up</span>
+              <span class="pager__name">{prev.name}</span>
+            </span>
+          </a>
+        ) : (
+          <a class="pager__card pager__card--prev" href={url('/circles/')}>
+            <span class="pager__text">
+              <span class="pager__dir">← All circles</span>
+              <span class="pager__name">The descent</span>
+            </span>
+          </a>
+        )
+      }
+      {
+        next ? (
+          <a class="pager__card pager__card--next" href={url(`/circles/${circleSlug(next)}/`)} style={`--pc:${next.colour}`}>
+            <Image src={img(next.n, 'backdrop')} widths={[480, 900]} sizes="(min-width: 700px) 45vw, 92vw" alt="" class="pager__img" />
+            <span class="pager__text">
+              <span class="pager__dir">Descend deeper →</span>
+              <span class="pager__name">{next.name}</span>
+            </span>
+          </a>
+        ) : (
+          <a class="pager__card pager__card--next pager__card--out" href={url('/#play')}>
+            <span class="pager__text">
+              <span class="pager__dir">Climb out →</span>
+              <span class="pager__name">See the stars</span>
+            </span>
+          </a>
+        )
+      }
+    </nav>
+
+    <section class="ch-cta wrap" aria-label="Get the game">
+      <p class="ch-cta__line">Nine circles. 91 levels. One very nervous poet.</p>
+      <StoreBadges align="center" />
+    </section>
+  </div>
+</Base>
+
+<script>
+  import { startParticles } from '../../scripts/particles';
+  import '../../scripts/circlePage';
+  const fx = document.querySelector<HTMLCanvasElement>('[data-particles]');
+  if (fx) startParticles(fx, fx.dataset.particles as never);
+</script>
+
+<style>
+  .ch {
+    --c-soft: color-mix(in srgb, var(--c) 22%, transparent);
+    --c-ink: color-mix(in srgb, var(--c) 55%, white);
+    background:
+      radial-gradient(90% 40% at 50% 0%, color-mix(in srgb, var(--c) 16%, transparent), transparent 70%),
+      var(--bg);
+  }
+
+  .section-lede {
+    color: var(--ink-soft);
+    max-width: 40rem;
+  }
+
+  /* ===== Hero ===== */
+  .ch-hero {
+    position: relative;
+    display: grid;
+    align-items: end;
+    min-height: 92svh;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .ch-hero__bg {
+    position: absolute;
+    inset: -6% -3%;
+    z-index: -4;
+    will-change: transform;
+  }
+
+  .ch-hero__bg :global(.ch-hero__bgimg) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ch-hero__fx {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -3;
+    pointer-events: none;
+  }
+
+  /* Foreground props sit above the shade, on the right, clear of the text. */
+  .ch-hero__prop {
+    position: absolute;
+    z-index: -1;
+    bottom: -5%;
+    will-change: transform;
+    filter: drop-shadow(0 20px 30px rgb(0 0 0 / 0.6)) brightness(0.72) saturate(0.95);
+  }
+
+  .ch-hero__prop :global(img) {
+    width: 100%;
+    height: auto;
+  }
+
+  .ch-hero__prop--a {
+    right: 22%;
+    bottom: -8%;
+    width: min(30vw, 380px);
+    filter: drop-shadow(0 20px 30px rgb(0 0 0 / 0.6)) brightness(0.6);
+  }
+
+  .ch-hero__prop--b {
+    right: -4%;
+    width: min(34vw, 400px);
+  }
+
+  .ch-hero__shade {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background:
+      linear-gradient(180deg, rgb(18 20 28 / 0.65) 0%, transparent 22%),
+      linear-gradient(0deg, var(--bg) 2%, rgb(18 20 28 / 0.75) 30%, transparent 65%);
+  }
+
+  .ch-hero__numeral {
+    position: absolute;
+    right: 4%;
+    top: 12%;
+    z-index: -2;
+    font-family: var(--font-hand);
+    font-size: clamp(8rem, 26vw, 22rem);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 2px color-mix(in srgb, var(--c-ink) 55%, transparent);
+    opacity: 0.32;
+    pointer-events: none;
+  }
+
+  .ch-hero__content {
+    padding: calc(var(--header-h) + 3rem) 0 3.5rem;
+  }
+
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0 0 1.2rem;
+    padding: 0;
+    list-style: none;
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+
+  .crumbs li + li::before {
+    content: '›';
+    margin-right: 0.4rem;
+    color: var(--ink-mute);
+  }
+
+  .crumbs a {
+    color: var(--ink-soft);
+    text-decoration: none;
+  }
+
+  .crumbs a:hover {
+    color: var(--gold);
+  }
+
+  .ch-hero__title {
+    font-size: clamp(3.4rem, 2rem + 8vw, 8.5rem);
+    line-height: 0.95;
+    margin-bottom: 0.15em;
+    text-shadow: 0 6px 40px rgb(0 0 0 / 0.7), 0 0 60px color-mix(in srgb, var(--c) 45%, transparent);
+  }
+
+  .ch-hero__line {
+    max-width: 38rem;
+    font-size: var(--step-1);
+    text-shadow: 0 2px 14px rgb(0 0 0 / 0.85);
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1.2rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .chip {
+    padding: 0.35em 0.9em;
+    border-radius: 999px;
+    background: rgb(18 20 28 / 0.6);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(6px);
+    font-size: var(--step--1);
+    font-weight: 800;
+  }
+
+  .chip--hazard {
+    background: color-mix(in srgb, var(--c) 75%, black);
+    border-color: transparent;
+  }
+
+  .chip--hazard::before {
+    content: '⚠ ';
+  }
+
+  /* ===== Briefing chat ===== */
+  .briefing {
+    max-width: 44rem;
+    padding: 2.5rem 0 1rem;
+  }
+
+  .chat {
+    display: grid;
+    gap: 0.9rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .chat__line {
+    display: flex;
+    align-items: end;
+    gap: 0.7rem;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+
+  .chat__line--dante {
+    flex-direction: row-reverse;
+  }
+
+  .chat__line--soul {
+    justify-content: center;
+  }
+
+  .chat__line :global(.chat__face) {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--bg-3);
+    border: 2px solid var(--line);
+    object-fit: cover;
+    flex: none;
+  }
+
+  .chat__bubble {
+    position: relative;
+    max-width: min(30rem, 78%);
+    padding: 0.65rem 1rem 0.75rem;
+    border-radius: 18px 18px 18px 4px;
+    background: var(--bg-3);
+    border: 1px solid var(--line);
+  }
+
+  .chat__line--dante .chat__bubble {
+    border-radius: 18px 18px 4px 18px;
+    background: color-mix(in srgb, #b8382c 30%, var(--bg-3));
+  }
+
+  .chat__line--soul .chat__bubble {
+    background: var(--parchment);
+    color: var(--parchment-ink);
+    border-radius: 18px;
+    transform: rotate(-2deg);
+    font-family: var(--font-hand);
+    font-size: var(--step-2);
+  }
+
+  .chat__who {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .chat__line--soul .chat__who {
+    color: var(--c);
+  }
+
+  .chat__text {
+    margin: 0;
+  }
+
+  .chat__dots {
+    display: none;
+    gap: 4px;
+    padding: 0.4rem 0 0.2rem;
+  }
+
+  .chat__dots i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--ink-mute);
+    animation: dot 1s infinite ease-in-out;
+  }
+
+  .chat__dots i:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+
+  .chat__dots i:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+
+  @keyframes dot {
+    40% {
+      transform: translateY(-4px);
+      opacity: 1;
+    }
+    0%,
+    80%,
+    100% {
+      opacity: 0.4;
+    }
+  }
+
+  .chat__line.is-waiting {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  .chat__line.is-typing .chat__dots {
+    display: flex;
+  }
+
+  .chat__line.is-typing .chat__text {
+    display: none;
+  }
+
+  /* ===== About ===== */
+  .about {
+    padding: 3.5rem 0 1rem;
+  }
+
+  .about__cols {
+    display: grid;
+    gap: 1.2rem;
+    margin-top: 1.2rem;
+  }
+
+  .about__col {
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+  }
+
+  .about__col h3 {
+    font-size: var(--step-2);
+    color: var(--gold);
+  }
+
+  .about__col p {
+    color: var(--ink-soft);
+  }
+
+  .about__col--game {
+    background: linear-gradient(160deg, var(--c-soft), var(--bg-2) 60%);
+  }
+
+  @media (min-width: 860px) {
+    .about__cols {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* ===== Souls ===== */
+  .souls {
+    padding: 4rem 0 1rem;
+  }
+
+  .souls__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+    gap: 1.1rem;
+    margin: 1.6rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .soul {
+    position: relative;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    perspective: 1200px;
+    cursor: pointer;
+  }
+
+  .soul__inner {
+    position: relative;
+    display: grid;
+    transform-style: preserve-3d;
+    transition: transform 0.7s cubic-bezier(0.3, 1.3, 0.5, 1);
+  }
+
+  .soul.is-flipped .soul__inner {
+    transform: rotateY(180deg);
+  }
+
+  .soul__face {
+    grid-area: 1 / 1;
+    padding: 1.1rem 1.2rem 1.3rem;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .soul__face--front {
+    background: linear-gradient(180deg, var(--bg-3), var(--bg-2));
+    border: 1px solid var(--line);
+    border-bottom: 0;
+  }
+
+  .soul__face--back {
+    transform: rotateY(180deg);
+    background: var(--parchment);
+    color: var(--parchment-ink);
+  }
+
+  .soul__stage {
+    display: grid;
+    place-items: end center;
+    height: 170px;
+    margin: -0.2rem -0.4rem 0.6rem;
+    border-radius: var(--radius);
+    background:
+      radial-gradient(60% 35% at 50% 92%, rgb(0 0 0 / 0.45), transparent 70%),
+      radial-gradient(80% 70% at 50% 60%, var(--c-soft), transparent 70%);
+  }
+
+  .soul__stage :global(.sprite) {
+    animation-play-state: paused;
+  }
+
+  .soul:hover .soul__stage :global(.sprite),
+  .soul:focus-within .soul__stage :global(.sprite) {
+    animation-play-state: running;
+  }
+
+  @media (pointer: coarse) {
+    .soul__stage :global(.sprite) {
+      animation-play-state: running;
+    }
+  }
+
+  .soul__name {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: var(--step-2);
+    margin-bottom: 0.25em;
+  }
+
+  .soul__tag {
+    padding: 0.15em 0.6em;
+    border-radius: 999px;
+    background: rgb(120 190 255 / 0.18);
+    color: #a9d6ff;
+    font: 800 0.72rem/1.4 var(--font-body);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .soul__about {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 0.98rem;
+  }
+
+  .soul__backtitle {
+    font-family: var(--font-hand);
+    font-weight: 400;
+    font-size: var(--step-2);
+    margin: 0 0 0.6rem;
+  }
+
+  .soul__gags {
+    display: grid;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .soul__gags li {
+    padding-left: 1.4rem;
+    position: relative;
+    font-size: 0.98rem;
+  }
+
+  .soul__gags li::before {
+    content: '✶';
+    position: absolute;
+    left: 0;
+    color: color-mix(in srgb, var(--c) 80%, black);
+  }
+
+  .soul__flip {
+    min-height: 46px;
+    border: 1px solid var(--line);
+    border-top: 0;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    background: color-mix(in srgb, var(--c) 35%, var(--bg-2));
+    color: var(--ink);
+    font: 800 0.95rem var(--font-body);
+    cursor: pointer;
+  }
+
+  .soul__flip:hover {
+    background: color-mix(in srgb, var(--c) 55%, var(--bg-2));
+  }
+
+  /* ===== Hazard + advice ===== */
+  .intel {
+    display: grid;
+    gap: 1.1rem;
+    padding: 3.5rem 0 1rem;
+  }
+
+  .intel__hazard,
+  .intel__advice {
+    padding: 1.6rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .intel__hazard {
+    position: relative;
+    overflow: hidden;
+    background:
+      repeating-linear-gradient(-45deg, transparent 0 18px, rgb(0 0 0 / 0.12) 18px 36px),
+      linear-gradient(140deg, color-mix(in srgb, var(--c) 70%, black), color-mix(in srgb, var(--c) 30%, var(--bg)));
+  }
+
+  .intel__hazard .eyebrow {
+    color: #fff3d6;
+  }
+
+  .intel__name {
+    font-size: var(--step-3);
+  }
+
+  .intel__hazard p:last-child {
+    margin: 0;
+    font-size: var(--step-1);
+  }
+
+  .intel__advice {
+    display: flex;
+    gap: 1.1rem;
+    align-items: start;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+  }
+
+  .intel__advice :global(.intel__face) {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--bg-3);
+    flex: none;
+  }
+
+  .intel__advice ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    color: var(--ink-soft);
+  }
+
+  .intel__advice li {
+    margin-bottom: 0.45rem;
+  }
+
+  @media (min-width: 860px) {
+    .intel {
+      grid-template-columns: 0.8fr 1.2fr;
+    }
+  }
+
+  /* ===== Bosses ===== */
+  .bosses {
+    padding: 4rem 0 1rem;
+  }
+
+  .bosses__grid {
+    display: grid;
+    gap: 1.3rem;
+    margin-top: 1.6rem;
+  }
+
+  .boss {
+    --rx: 0deg;
+    --ry: 0deg;
+    --gx: 50%;
+    --gy: 30%;
+    display: grid;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(60% 50% at var(--gx) var(--gy), color-mix(in srgb, var(--c) 30%, transparent), transparent 70%),
+      linear-gradient(180deg, var(--bg-3), var(--bg-2));
+    border: 1px solid var(--line);
+    transform: perspective(1000px) rotateX(var(--rx)) rotateY(var(--ry));
+    transition: transform 0.25s ease-out;
+  }
+
+  .boss--main {
+    border-color: color-mix(in srgb, var(--c) 55%, var(--line));
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--c) 25%, transparent), var(--shadow);
+  }
+
+  .boss__art {
+    display: grid;
+    place-items: center;
+    padding: 1.5rem 1.5rem 0;
+    min-height: 260px;
+  }
+
+  .boss__art :global(.boss__img) {
+    width: min(100%, 380px);
+    height: auto;
+    filter: drop-shadow(0 22px 26px rgb(0 0 0 / 0.6));
+    animation: hover 5s ease-in-out infinite;
+  }
+
+  @keyframes hover {
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .boss__body {
+    padding: 1.2rem 1.5rem 1.6rem;
+  }
+
+  .boss__role {
+    margin: 0 0 0.2rem;
+    font-size: var(--step--1);
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--c-ink);
+  }
+
+  .boss__name {
+    font-size: var(--step-3);
+  }
+
+  .boss__quip {
+    display: inline-block;
+    padding: 0.4rem 0.9rem;
+    border-radius: var(--radius);
+    background: var(--parchment);
+    color: var(--parchment-ink);
+    font-family: var(--font-hand);
+    font-size: var(--step-1);
+    transform: rotate(-1.5deg);
+  }
+
+  .boss__body > p:not(.boss__role, .boss__quip) {
+    color: var(--ink-soft);
+  }
+
+  .boss__beats {
+    display: grid;
+    gap: 0.7rem;
+    margin: 1rem 0 0;
+  }
+
+  .boss__beats div {
+    padding: 0.7rem 0.9rem;
+    border-radius: var(--radius);
+    background: rgb(0 0 0 / 0.25);
+  }
+
+  .boss__beats dt {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .boss__beats dd {
+    margin: 0.1rem 0 0;
+    color: var(--ink-soft);
+  }
+
+  @media (min-width: 900px) {
+    .bosses__grid {
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+    }
+
+    .bosses__grid--one {
+      grid-template-columns: 1fr;
+    }
+
+    .bosses__grid--one .boss {
+      grid-template-columns: 1.1fr 1fr;
+      align-items: center;
+    }
+  }
+
+  /* ===== New towers ===== */
+  .newtowers {
+    padding: 4rem 0 1rem;
+  }
+
+  .newtowers__grid {
+    display: grid;
+    gap: 1.1rem;
+    margin-top: 1.6rem;
+  }
+
+  @media (min-width: 900px) {
+    .newtowers__grid {
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    }
+  }
+
+  .nt {
+    display: grid;
+    grid-template-columns: minmax(130px, 0.8fr) 1.2fr;
+    gap: 1rem;
+    align-items: center;
+    padding: 1.2rem;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(160deg, var(--bg-3), var(--bg-2));
+    border: 1px solid var(--line);
+  }
+
+  .nt__stage {
+    display: grid;
+    place-items: end center;
+    height: 210px;
+    background: radial-gradient(60% 40% at 50% 85%, rgb(242 184 75 / 0.2), transparent 70%);
+  }
+
+  .nt__stage :global(.nt__big) {
+    grid-area: 1 / 1;
+    max-height: 200px;
+    width: auto;
+    opacity: 0;
+    transform: scale(0.9) translateY(8px);
+    transition: opacity 0.25s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    filter: drop-shadow(0 12px 12px rgb(0 0 0 / 0.5));
+  }
+
+  .nt__stage :global(.nt__big.is-shown) {
+    opacity: 1;
+    transform: none;
+  }
+
+  .nt__name {
+    font-size: var(--step-2);
+    margin-bottom: 0.1em;
+  }
+
+  .nt__role {
+    margin: 0 0 0.4rem;
+    color: var(--gold);
+    font-weight: 800;
+    font-size: var(--step--1);
+  }
+
+  .nt__line {
+    color: var(--ink-soft);
+    font-size: 0.98rem;
+  }
+
+  .nt__tier {
+    margin: 0 0 0.4rem;
+    font-size: var(--step--1);
+    color: var(--ink-mute);
+  }
+
+  .nt__thumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .nt__thumb {
+    width: 48px;
+    height: 48px;
+    padding: 3px;
+    border-radius: 12px;
+    border: 1.5px solid var(--line);
+    background: var(--bg);
+    cursor: pointer;
+  }
+
+  .nt__thumb :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .nt__thumb[aria-pressed='true'] {
+    border-color: var(--gold);
+    background: color-mix(in srgb, var(--gold) 18%, var(--bg));
+  }
+
+  @media (max-width: 520px) {
+    .nt {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ===== Parade ===== */
+  .parade {
+    padding: 4.5rem 0 1rem;
+  }
+
+  .parade__head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1rem;
+  }
+
+  .parade__score {
+    display: flex;
+    gap: 0.6rem;
+    margin: 0 0 1rem;
+  }
+
+  .parade__score span {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    font-weight: 700;
+  }
+
+  .parade__score b {
+    font-family: var(--font-hand);
+    font-weight: 400;
+    font-size: var(--step-2);
+    color: var(--gold);
+    margin-right: 0.2rem;
+  }
+
+  .parade__field {
+    position: relative;
+    height: clamp(220px, 32vw, 340px);
+    overflow: hidden;
+    border-block: 1px solid var(--line);
+    background: #0d0e14;
+  }
+
+  .parade__field :global(.parade__bg) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 85%;
+    opacity: 0.85;
+  }
+
+  .parade__field :global(.parade__soul) {
+    position: absolute;
+    left: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: crosshair;
+    filter: drop-shadow(0 8px 6px rgb(0 0 0 / 0.5));
+    transition: filter 0.15s ease;
+  }
+
+  .parade__field :global(.parade__soul:hover),
+  .parade__field :global(.parade__soul:focus-visible) {
+    filter: drop-shadow(0 0 14px rgb(255 220 140 / 0.9));
+  }
+
+  .parade__field :global(.sprite--echo) {
+    filter: hue-rotate(190deg) saturate(0.5) brightness(1.15);
+    opacity: 0.85;
+  }
+
+  .parade__field :global(.parade__poof) {
+    position: absolute;
+    pointer-events: none;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+  }
+
+  .parade__quip {
+    min-height: 1.6em;
+    margin-top: 0.8rem;
+    text-align: center;
+    font-family: var(--font-hand);
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+  }
+
+  /* ===== Pager ===== */
+  .pager {
+    display: grid;
+    gap: 1rem;
+    padding: 3.5rem 0 1rem;
+  }
+
+  @media (min-width: 700px) {
+    .pager {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .pager__card {
+    --pc: var(--c);
+    position: relative;
+    display: grid;
+    align-items: end;
+    min-height: 170px;
+    overflow: hidden;
+    isolation: isolate;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--line);
+    background: linear-gradient(140deg, color-mix(in srgb, var(--pc) 45%, var(--bg-2)), var(--bg-2));
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .pager__card :global(.pager__img) {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .pager__card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(0deg, rgb(12 13 19 / 0.9), transparent 75%);
+  }
+
+  .pager__card:hover {
+    color: var(--ink);
+    border-color: var(--pc);
+  }
+
+  .pager__card:hover :global(.pager__img) {
+    transform: scale(1.06);
+  }
+
+  .pager__text {
+    display: grid;
+    padding: 1.2rem 1.4rem;
+  }
+
+  .pager__card--next .pager__text {
+    text-align: right;
+  }
+
+  .pager__dir {
+    font-weight: 800;
+    font-size: var(--step--1);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .pager__name {
+    font-family: var(--font-hand);
+    font-size: var(--step-3);
+    line-height: 1.1;
+  }
+
+  .ch-cta {
+    display: grid;
+    justify-items: center;
+    gap: 0.8rem;
+    padding: 3rem 0 4.5rem;
+    text-align: center;
+  }
+
+  .ch-cta__line {
+    margin: 0;
+    font-family: var(--font-hand);
+    font-size: var(--step-2);
+  }
+
+  @media (max-width: 700px) {
+    .ch-hero__prop--a {
+      display: none;
+    }
+
+    .ch-hero__prop--b {
+      width: 46vw;
+      right: -14%;
+      bottom: auto;
+      top: 18%;
+      opacity: 0.8;
+    }
+
+    .ch-hero__numeral {
+      top: 9%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .boss__art :global(.boss__img) {
+      animation: none;
+    }
+
+    .soul__inner {
+      transition: none;
+    }
+  }
+</style>
